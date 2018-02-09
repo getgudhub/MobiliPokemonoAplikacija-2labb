@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Mobili Aplikacija</string>
+
+    <string name="login_label">Prisijungimas</string>
+    <string name="register_label">Naujas vartotojas</string>
+    <string name="search_label">Paieška</string>
+    <string name="new_entry_label">Naujas įrašas</string>
+
+    <string name="login_invalid_username">Klaidingai įvestas prisijungimo vardas</string>
+    <string name="login_invalid_password">Klaidingai įvestas slaptažodis</string>
+
+    <string name="name_invalid">Netinkamas pokemono vardas</string>
+    <string name="checkbox_not_checked">Reikia pasirinkti bent viena "ability"</string>
+    <string name="id_invalid">Netinkamas arba tuscias id</string>
+    <string name="weight_invalid">Netinkamas svoris</string>
+    <string name="height_invalid">Netinkamas ugis</string>
+
+    <string name="invalid_username">Netinkamas vardas</string>
+    <string name="invalid_password">Netinkamas slaptažodis</string>
+    <string name="invalid_passwordR">Nevienodi slaptažodžiai</string>
+    <string name="invalid_email">Netinkamas el. paštas</string>
+
+
+</resources>
