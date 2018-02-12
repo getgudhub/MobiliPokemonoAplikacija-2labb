@@ -19,6 +19,7 @@
     <string name="invalid_password">Netinkamas slaptažodis</string>
     <string name="invalid_passwordR">Nevienodi slaptažodžiai</string>
     <string name="invalid_email">Netinkamas el. paštas</string>
+    <string name="invalid_id">Nerastas pokemonas</string>
 
 
 </resources>

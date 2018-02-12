@@ -11,7 +11,7 @@ public class Pokemonas {
     private String abilities;
     private String type;
 
-    public Pokemonas(int id, String name, double weight, double height, String cp, String abilities, String type) {
+    public Pokemonas(int id, String name, String type, String abilities, String cp, double weight, double height) {
         this.id = id;
         this.name = name;
         this.weight = weight;

@@ -107,7 +107,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
                 cursor.getString(2),
                 cursor.getString(3)
         );
-
+        cursor.close();
         return user;
     }
 
@@ -135,10 +135,11 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
                 // adding user to list
                 users.add(user);
             } while (cursor.moveToNext());
-        }
+        }   cursor.close();
 
         // return users list
         return users;
+
     }
 
     public boolean isValidUser(String username, String password){
@@ -148,7 +149,9 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
                         USER_PASSWORD + "='" + password + "'" , null);
         if (c.getCount() > 0)
             return true;
+        c.close();
         return false;
+
     }
 
     //POKEMONS
@@ -186,8 +189,60 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         return res;
     }
 
+    Pokemonas getDeletePokemonInfo(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
 
-    public ArrayList<Pokemonas> getAllPokemons() {
+        Cursor cursor = db.query(
+                TABLE_POKEMONS,
+                new String[]{
+                        POKEMON_ID,
+                        POKEMON_NAME,
+                        POKEMON_TYPE,
+                        POKEMON_ABILITIES,
+                        POKEMON_CP,
+                        POKEMON_WEIGHT,
+                        POKEMON_HEIGHT
+                },
+                POKEMON_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Pokemonas pokemon = new Pokemonas(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getString(3),
+                cursor.getString(4),
+                cursor.getDouble(5),
+                cursor.getDouble(6)
+        );
+        cursor.close();
+        return pokemon;
+    }
+
+
+    public boolean checkId(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String Query = "Select * from " + TABLE_POKEMONS + " where " + POKEMON_ID + " = " + id;
+        Cursor cursor = db.rawQuery(Query, null);
+        if(cursor.getCount() <= 0) {
+            cursor.close();
+            return false;
+        }else{
+            cursor.close();
+            return true;
+            }
+    }
+
+    public boolean deletePokemon(int id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_POKEMONS, POKEMON_ID + "=" + id, null) > 0;
+    }
+
+    /*public ArrayList<Pokemonas> getAllPokemons() {
             ArrayList<Pokemonas> pokemon = new ArrayList<Pokemonas>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_POKEMONS;
@@ -213,9 +268,9 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
                 pokemon.add(poke);
             } while (cursor.moveToNext());
         }
-
+        cursor.close();
         // return pokemons list
         return pokemon;
-    }
+    }*/
 
 }

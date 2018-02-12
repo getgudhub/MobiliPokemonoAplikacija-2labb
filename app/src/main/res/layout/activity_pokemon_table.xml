@@ -9,11 +9,29 @@
         android:id="@+id/btnPerziura"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Peržiūra (toast)" />
+        android:text="Pokemonų Peržiūra (toast)" />
 
     <Button
         android:id="@+id/btnPerziura2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Peržiūra (e. block)" />
+        android:text="Pokemonų Peržiūra (buffer)" />
+
+    <Button
+        android:id="@+id/btnRedagavimas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pokemono redagavimas" />
+
+    <Button
+        android:id="@+id/btnTrinimas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pokemono trinimas" />
+
+    <Button
+        android:id="@+id/btnPaieska"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pokemono paieška" />
 </LinearLayout>

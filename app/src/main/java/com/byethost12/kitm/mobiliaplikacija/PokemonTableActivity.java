@@ -10,9 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PokemonTableActivity extends Activity {
 
     @Override
@@ -23,6 +20,7 @@ public class PokemonTableActivity extends Activity {
         final DatabaseSQLite db = new DatabaseSQLite(this);
         Button perziuraBtn = (Button) findViewById(R.id.btnPerziura);
         Button perziura2Btn = (Button) findViewById(R.id.btnPerziura2);
+        Button deleteBtn = (Button) findViewById(R.id.btnTrinimas);
 
         perziuraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,7 +33,7 @@ public class PokemonTableActivity extends Activity {
                     } while (c.moveToNext());
                 } else {
                     showMessage("error", "Nothing found");
-            }
+                }
                 db.close();
 
             }
@@ -61,6 +59,14 @@ public class PokemonTableActivity extends Activity {
                 }
                 // Show all data
                 showMessage("All Pokemons", buffer.toString());
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToDeleteActivity = new Intent(PokemonTableActivity.this, PokemonDeleteActivity.class);
+                startActivity(goToDeleteActivity);
             }
         });
     }
