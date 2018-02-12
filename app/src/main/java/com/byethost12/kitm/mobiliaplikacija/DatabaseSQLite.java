@@ -29,7 +29,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
     private static final String POKEMON_ABILITIES   = "abilities";
     private static final String POKEMON_CP          = "cp";
     private static final String POKEMON_WEIGHT      = "weight";
-    private static final String POKEMON_HEIGHT       = "height";
+    private static final String POKEMON_HEIGHT      = "height";
 
     String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
             + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -157,7 +157,6 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(POKEMON_ID,          poke.getId());
         values.put(POKEMON_NAME,        poke.getName());
         values.put(POKEMON_TYPE,        poke.getType());
         values.put(POKEMON_ABILITIES,   poke.getAbilities());
@@ -175,11 +174,18 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
     public Cursor getAllPokes() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.query(TABLE_POKEMONS, new String[]{
-                POKEMON_ID, POKEMON_TYPE,
+                POKEMON_ID, POKEMON_NAME, POKEMON_TYPE,
                     POKEMON_ABILITIES, POKEMON_CP,
                         POKEMON_WEIGHT, POKEMON_HEIGHT},
                 null, null, null, null, null);
     }
+
+    public Cursor getAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM "+TABLE_POKEMONS,null);
+        return res;
+    }
+
 
     public ArrayList<Pokemonas> getAllPokemons() {
             ArrayList<Pokemonas> pokemon = new ArrayList<Pokemonas>();

@@ -34,7 +34,6 @@ public class NewEntryActivity extends AppCompatActivity {
         setTitle(R.string.new_entry_label);
 
         btnSubmit = (Button) findViewById(R.id.btnAdd);
-        etId = (EditText) findViewById(R.id.etId);
         etName = (EditText) findViewById(R.id.etName);
         etWeight = (EditText) findViewById(R.id.etWeight);
         etHeight = (EditText) findViewById(R.id.etHeight);
@@ -85,8 +84,8 @@ public class NewEntryActivity extends AppCompatActivity {
                     cbTwoHeads.requestFocus();
                     cbTwoHeads.setError(getResources().getString(R.string.checkbox_not_checked));
                 } else {
-                    id = Integer.parseInt(etId.getText().toString());
-                    pokemonas.setId(id);
+                   // id = Integer.parseInt(etId.getText().toString());
+                   // pokemonas.setId(id);
                     name = etName.getText().toString();
                     pokemonas.setName(name);
                     weight = Double.parseDouble(etWeight.getText().toString());
@@ -123,7 +122,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
                     db.addPokemon(pokemonas);
 
-                    toastMessage("ID: " + pokemonas.getId() + "\n" +
+                    toastMessage(
                             "Name: " + pokemonas.getName() + "\n" +
                             "Weight: " + pokemonas.getWeight() + " kg\n" +
                             "Height: " + pokemonas.getHeight() + " m\n" +
