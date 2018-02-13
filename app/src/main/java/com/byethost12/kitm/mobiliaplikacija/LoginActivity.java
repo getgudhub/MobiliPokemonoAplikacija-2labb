@@ -59,18 +59,14 @@ public class LoginActivity extends AppCompatActivity {
                     cancel = true;
                     etUsername.requestFocus();
                     etUsername.setError(getResources().getString(R.string.login_invalid_username));
-                    //Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_invalid_username),
-                    //Toast.LENGTH_SHORT).show();
                 } else if (!Validation.isValidCredentials(etPassword.getText().toString())) {
                     cancel = true;
                     etPassword.requestFocus();
                     etPassword.setError(getResources().getString(R.string.login_invalid_password));
-                    // Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_invalid_password),
-                    // Toast.LENGTH_SHORT).show();
                 } else { // praėjo validaciją, kreipiamės į duomenų bazę
-                    DatabaseSQLite databaseSQLite = new DatabaseSQLite(getApplicationContext());
+                    DatabaseSQLiteUser db = new DatabaseSQLiteUser(getApplicationContext());
 
-                    if (databaseSQLite.isValidUser(etUsername.getText().toString(),
+                    if (db.isValidUser(etUsername.getText().toString(),
                             etPassword.getText().toString())) { // rado vartotoją
                         cancel = false;
                     } else { // nerado vartotojo
@@ -94,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                         user.setRememberMeKeyForLogin(false);
                     }
 
-                    Intent goToSearchActivity = new Intent(LoginActivity.this, SearchActivity.class);
+                    Intent goToSearchActivity = new Intent(LoginActivity.this, ChoiceActivity.class);
                     startActivity(goToSearchActivity);
                 }
 

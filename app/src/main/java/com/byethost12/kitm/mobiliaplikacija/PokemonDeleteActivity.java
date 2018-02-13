@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class PokemonDeleteActivity extends Activity{
 
     EditText etId;
-    DatabaseSQLite db;
+    DatabaseSQLitePokemon db;
     Button deleteBtn;
 
     @Override
@@ -22,7 +22,7 @@ public class PokemonDeleteActivity extends Activity{
 
         deleteBtn = (Button) findViewById(R.id.deleteBtn);
         etId = (EditText) findViewById(R.id.etId);
-        db = new DatabaseSQLite(this);
+        db = new DatabaseSQLitePokemon(this);
 
         deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -36,8 +36,8 @@ public class PokemonDeleteActivity extends Activity{
                         @Override
                         public void onClick(View v) {
                             db.deletePokemon(Integer.parseInt(etId.getText().toString()));
-                            Toast.makeText(PokemonDeleteActivity.this, "Pokemon deleted", Toast.LENGTH_SHORT).show();
-                            Intent goBack = new Intent(PokemonDeleteActivity.this, PokemonTableActivity.class);
+                            Toast.makeText(PokemonDeleteActivity.this, "Pokemonas ištrintas", Toast.LENGTH_SHORT).show();
+                            Intent goBack = new Intent(PokemonDeleteActivity.this, ChoiceActivity.class);
                             startActivity(goBack);
                         }
                     });
@@ -46,18 +46,18 @@ public class PokemonDeleteActivity extends Activity{
         });
     }
     public void showToast(){
-        db = new DatabaseSQLite(this);
+        db = new DatabaseSQLitePokemon(this);
         Pokemonas pok = new Pokemonas();
-        pok = db.getDeletePokemonInfo(Integer.parseInt(etId.getText().toString()));
+        pok = db.getByIdPokemonInfo(Integer.parseInt(etId.getText().toString()));
         Toast.makeText(
                 this,
                         "id: " + pok.getId()
-                        + "\n" + "Name: " + pok.getName()
-                        + "\n" + "Type:  " + pok.getType()
-                        + "\n" + "Abilities: "+ pok.getAbilities()
+                        + "\n" + "Vardas: " + pok.getName()
+                        + "\n" + "Tipas:  " + pok.getType()
+                        + "\n" + "Sugebėjimai: "+ pok.getAbilities()
                         + "\n" + "Cp: " + pok.getCp()
-                        + "\n" + "Weight:  " + pok.getWeight() +" kg"
-                        + "\n" + "Height: "+ pok.getHeight() +" m"
+                        + "\n" + "Svoris:  " + pok.getWeight() +" kg"
+                        + "\n" + "Ūgis: "+ pok.getHeight() +" m"
                         + "\n\n" + "Norėdami ištrinti pokemoną spauskite trinti mygtuką vėl",
                 Toast.LENGTH_LONG)
                 .show();

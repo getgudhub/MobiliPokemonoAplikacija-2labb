@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.byethost12.kitm.mobiliaplikacija.SearchActivity">
+    android:layout_margin="20dp">
 
-    <Button
-        android:id="@+id/btnPrideti"
-        android:text="PRIDĖTI"
+    <EditText
+        android:id="@+id/etId"
+        android:hint="Pokemon id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textAlignment="center"
+        android:text="/paieška pagal id arba vardą/"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:hint="Pokemon name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/btnPerziureti"
-        android:text="PERŽIŪRĖTI"
+        android:id="@+id/searchPokeBtn"
+        android:text="Surasti pokemoną"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

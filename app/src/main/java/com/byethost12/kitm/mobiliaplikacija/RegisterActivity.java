@@ -1,7 +1,6 @@
 package com.byethost12.kitm.mobiliaplikacija;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +21,7 @@ public class RegisterActivity extends Activity {
                 final EditText etPasswordR = (EditText) findViewById(R.id.passwordR);
                 final EditText etEmail = (EditText) findViewById(R.id.email);
                 Button btnRegister = (Button) findViewById(R.id.btnRegister);
-                final DatabaseSQLite dbSQLite = new DatabaseSQLite(this);
+                final DatabaseSQLiteUser dbSQLite = new DatabaseSQLiteUser(this);
 
                 btnRegister.setOnClickListener(new View.OnClickListener() {
                     @Override

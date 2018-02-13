@@ -16,11 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".NewEntryActivity" />
+        <activity android:name=".ChoiceActivity" />
+        <activity android:name=".NewPokemonActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".PokemonTableActivity" />
         <activity android:name=".PokemonDeleteActivity" />
+        <activity android:name=".PokemonSearchActivity" />
+        <activity android:name=".PokemonUpdateActivity" />
     </application>
 
 </manifest>

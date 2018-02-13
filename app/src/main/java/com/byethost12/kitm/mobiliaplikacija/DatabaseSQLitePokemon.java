@@ -6,21 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-
-public class DatabaseSQLite extends SQLiteOpenHelper {
+public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION   = 2;
     private static final String DATABASE_NAME   = "db";
-
-    private static final String TABLE_USERS     = "users";
-    private static final String USER_ID         = "id";
-    private static final String USER_LEVEL      = "userlevel";
-    private static final String USER_NAME       = "name";
-    private static final String USER_PASSWORD   = "password";
-    private static final String USER_EMAIL      = "email";
 
     private static final String TABLE_POKEMONS      = "pokemons";
     private static final String POKEMON_ID          = "id";
@@ -31,13 +19,6 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
     private static final String POKEMON_WEIGHT      = "weight";
     private static final String POKEMON_HEIGHT      = "height";
 
-    String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
-            + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + USER_LEVEL + " TEXT,"
-            + USER_NAME + " TEXT,"
-            + USER_PASSWORD + " TEXT,"
-            + USER_EMAIL + " TEXT" + ")";
-
     String CREATE_POKEMONS_TABLE ="CREATE TABLE "+ TABLE_POKEMONS
             + "(" +  POKEMON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + POKEMON_NAME + " TEXT,"
@@ -47,114 +28,23 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
             + POKEMON_WEIGHT + " REAL,"
             + POKEMON_HEIGHT + " REAL" + ")";
 
-    public DatabaseSQLite(Context context) {
+    public DatabaseSQLitePokemon(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_POKEMONS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_POKEMONS);
 
         // Create tables again
         onCreate(db);
     }
-
-    void addUser(User user) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(USER_LEVEL,      user.getUserlevel());
-        values.put(USER_NAME,       user.getUsernameForRegister());
-        values.put(USER_PASSWORD,   user.getPasswordForRegister());
-        values.put(USER_EMAIL,      user.getEmailForRegister());
-
-        // Inserting Row
-        db.insert(TABLE_USERS, null, values);
-
-        // Closing database connection
-        db.close();
-    }
-
-    User getUser(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(
-                TABLE_USERS,
-                new String[]{
-                        USER_ID,
-                        USER_LEVEL,
-                        USER_NAME,
-                        USER_PASSWORD,
-                        USER_EMAIL
-                },
-                USER_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
-
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        User user = new User(
-                cursor.getString(0),
-                cursor.getString(1),
-                cursor.getString(2),
-                cursor.getString(3)
-        );
-        cursor.close();
-        return user;
-    }
-
-    public List<User> getAllUsers() {
-        List<User> users = new ArrayList<User>();
-
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_USERS;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                User user = new User();
-
-                user.setId(Integer.parseInt(cursor.getString(0)));
-                user.setUserlevel(cursor.getString(1));
-                user.setUsernameForRegister(cursor.getString(2));
-                user.setPasswordForRegister(cursor.getString(3));
-                user.setEmailForRegister(cursor.getString(4));
-
-                // adding user to list
-                users.add(user);
-            } while (cursor.moveToNext());
-        }   cursor.close();
-
-        // return users list
-        return users;
-
-    }
-
-    public boolean isValidUser(String username, String password){
-        Cursor c = getReadableDatabase().rawQuery(
-                "SELECT * FROM " + TABLE_USERS + " WHERE "
-                        + USER_NAME + "='" + username + "'AND " +
-                        USER_PASSWORD + "='" + password + "'" , null);
-        if (c.getCount() > 0)
-            return true;
-        c.close();
-        return false;
-
-    }
-
-    //POKEMONS
 
     public void addPokemon(Pokemonas poke){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -174,6 +64,21 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         db.close();
     }
 
+    public boolean updatePokemon(Pokemonas poke){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(POKEMON_NAME,        poke.getName());
+        values.put(POKEMON_TYPE,        poke.getType());
+        values.put(POKEMON_ABILITIES,   poke.getAbilities());
+        values.put(POKEMON_CP,          poke.getCp());
+        values.put(POKEMON_WEIGHT,      poke.getWeight());
+        values.put(POKEMON_HEIGHT,      poke.getHeight());
+
+        return db.update(TABLE_POKEMONS, values, POKEMON_ID +"="+ poke.getId(), null) > 0;
+
+    }
+
     public Cursor getAllPokes() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.query(TABLE_POKEMONS, new String[]{
@@ -189,7 +94,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         return res;
     }
 
-    Pokemonas getDeletePokemonInfo(int id){
+    Pokemonas getByIdPokemonInfo(int id){
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.query(
@@ -221,6 +126,38 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
         cursor.close();
         return pokemon;
     }
+    Pokemonas getByNamePokemonInfo(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.query(
+                TABLE_POKEMONS,
+                new String[]{
+                        POKEMON_ID,
+                        POKEMON_NAME,
+                        POKEMON_TYPE,
+                        POKEMON_ABILITIES,
+                        POKEMON_CP,
+                        POKEMON_WEIGHT,
+                        POKEMON_HEIGHT
+                },
+                POKEMON_NAME + "=?",
+                new String[]{String.valueOf(name)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Pokemonas pokemon = new Pokemonas(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getString(3),
+                cursor.getString(4),
+                cursor.getDouble(5),
+                cursor.getDouble(6)
+        );
+        cursor.close();
+        return pokemon;
+    }
 
 
     public boolean checkId(int id){
@@ -234,6 +171,18 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
             cursor.close();
             return true;
             }
+    }
+    public boolean checkName(String  name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String Query = "Select * from " + TABLE_POKEMONS + " where " + POKEMON_NAME + " = '" + name +"'";
+        Cursor cursor = db.rawQuery(Query, null);
+        if(cursor.getCount() <= 0) {
+            cursor.close();
+            return false;
+        }else{
+            cursor.close();
+            return true;
+        }
     }
 
     public boolean deletePokemon(int id)
