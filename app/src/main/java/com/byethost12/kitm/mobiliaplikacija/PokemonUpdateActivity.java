@@ -86,6 +86,8 @@ public class PokemonUpdateActivity extends Activity {
                     cbFlying.requestFocus();
                     cbFlying.setError(getResources().getString(R.string.checkbox_not_checked));
                 } else {
+                    id = Integer.parseInt(etId.getText().toString());
+                    pokemonas.setId(id);
                     name = etName.getText().toString();
                     pokemonas.setName(name);
                     weight = Double.parseDouble(etWeight.getText().toString());
@@ -120,9 +122,6 @@ public class PokemonUpdateActivity extends Activity {
                     }
                     pokemonas.setAbilities(checkboxText);
 
-                    Intent goToSearchActivity = new Intent(PokemonUpdateActivity.this, ChoiceActivity.class);
-                    startActivity(goToSearchActivity);
-
                     spinnerText = spinner.getSelectedItem().toString();
                     pokemonas.setType(spinnerText);
 
@@ -136,6 +135,9 @@ public class PokemonUpdateActivity extends Activity {
                                     "CP: " + pokemonas.getCp() + "\n" +
                                     "Sugebėjimai: " + pokemonas.getAbilities() + "\n" +
                                     "Tipas: " + pokemonas.getType());
+
+                    Intent goToSearchActivity = new Intent(PokemonUpdateActivity.this, ChoiceActivity.class);
+                    startActivity(goToSearchActivity);
 
                 }
             }

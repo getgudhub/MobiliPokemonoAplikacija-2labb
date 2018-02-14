@@ -6,6 +6,7 @@
     <string name="choice_label">Pasirinkimai</string>
     <string name="new_entry_label">Naujas įrašas</string>
     <string name="search_label">Paieška</string>
+    <string name="pokemon_table">Pokemonų lentelė</string>
 
     <string name="login_invalid_username">Klaidingai įvestas prisijungimo vardas</string>
     <string name="login_invalid_password">Klaidingai įvestas slaptažodis</string>

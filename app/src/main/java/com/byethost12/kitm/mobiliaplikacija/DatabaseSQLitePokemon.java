@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION   = 2;
     private static final String DATABASE_NAME   = "db";
@@ -64,7 +67,7 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean updatePokemon(Pokemonas poke){
+    public int updatePokemon( Pokemonas poke){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -75,8 +78,18 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
         values.put(POKEMON_WEIGHT,      poke.getWeight());
         values.put(POKEMON_HEIGHT,      poke.getHeight());
 
-        return db.update(TABLE_POKEMONS, values, POKEMON_ID +"="+ poke.getId(), null) > 0;
+        int i = db.update(TABLE_POKEMONS, values, POKEMON_ID + " = ?",
+                new String[] {String.valueOf(poke.getId())});
 
+        db.close();
+        return i;
+
+    }
+
+    public boolean deletePokemon(int id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_POKEMONS, POKEMON_ID + "=" + id, null) > 0;
     }
 
     public Cursor getAllPokes() {
@@ -185,13 +198,9 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
         }
     }
 
-    public boolean deletePokemon(int id)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_POKEMONS, POKEMON_ID + "=" + id, null) > 0;
-    }
 
-    /*public ArrayList<Pokemonas> getAllPokemons() {
+
+    public ArrayList<Pokemonas> getAllPokemons() {
             ArrayList<Pokemonas> pokemon = new ArrayList<Pokemonas>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_POKEMONS;
@@ -220,6 +229,6 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
         cursor.close();
         // return pokemons list
         return pokemon;
-    }*/
+    }
 
 }
