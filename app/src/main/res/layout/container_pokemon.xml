@@ -5,45 +5,55 @@
     android:layout_height="match_parent"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/pavadinimas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Pavadinimas"
-        android:textColor="@color/colorAccent"
-        android:layout_marginLeft="5dp"/>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
 
-    <TextView
-        android:id="@+id/galia"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Galia: "
-        android:layout_alignParentRight="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_below="@+id/pavadinimas"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tipas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tipas: "
-        android:layout_margin="5dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_below="@+id/pavadinimas"/>
+            <TextView
+                android:id="@+id/pavadinimas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Pavadinimas"
+                android:textColor="@color/colorAccent"
+                android:layout_marginLeft="5dp"/>
 
-    <TextView
-        android:id="@+id/savybes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Savybės: "
-        android:layout_margin="5dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_below="@+id/tipas"/>
+        <TextView
+            android:id="@+id/galia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Galia: "
+            android:layout_alignParentRight="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_below="@+id/pavadinimas" />
 
+        <TextView
+            android:id="@+id/tipas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipas: "
+            android:layout_margin="5dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_below="@+id/pavadinimas"/>
 
+        <TextView
+            android:id="@+id/savybes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Savybės: "
+            android:layout_margin="5dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_below="@+id/tipas"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>

@@ -26,7 +26,7 @@ public class ChoiceActivity extends AppCompatActivity {
         setTitle(R.string.choice_label);
 
         final DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(this);
-        //Button perziuraBtn = (Button) findViewById(R.id.btnPerziura);
+        Button perziuraBtn = (Button) findViewById(R.id.btnPerziuraRecycler);
         deleteBtn = (Button) findViewById(R.id.btnTrinimas);
         btnPrideti = (Button) findViewById(R.id.btnPrideti);
         btnPerziureti = (Button) findViewById(R.id.btnPerziureti);
@@ -45,7 +45,7 @@ public class ChoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Cursor res = db.getAllData();
-                if (res.getCount() == 0) {
+                if (res.getCount() == 0 || res == null) {
                     showMessage("Error", "Nieko nerasta");
                     return;
                 }
@@ -56,11 +56,19 @@ public class ChoiceActivity extends AppCompatActivity {
                     buffer.append("Pokemono Tipas: " + res.getString(2) + "\n");
                     buffer.append("Pokemono Sugebėjimai: " + res.getString(3) + "\n");
                     buffer.append("Pokemono Cp: " + res.getString(4) + "\n");
-                    buffer.append("Pokemono Plotis: " + res.getDouble(5) + "\n");
-                    buffer.append("Pokemono Ūgis: " + res.getDouble(6) + "\n\n");
+                    buffer.append("Pokemono Plotis: " + res.getDouble(5) + "kg\n");
+                    buffer.append("Pokemono Ūgis: " + res.getDouble(6) + "m\n\n");
                 }
                 // Show all data
                 showMessage("Visi pokemonai", buffer.toString());
+            }
+        });
+
+        perziuraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChoiceActivity.this, PokemonTableActivity.class);
+                startActivity(intent);
             }
         });
 

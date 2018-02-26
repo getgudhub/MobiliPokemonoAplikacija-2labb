@@ -103,19 +103,19 @@ public class NewPokemonActivity extends AppCompatActivity {
                     String checkboxText = "";
 
                     if (cbFlying.isChecked()) {
-                        checkboxText = checkboxText + "Skrendantis,";
+                        checkboxText = checkboxText + "Skrendantis, ";
                     }
                     if (cbInvisible.isChecked()) {
-                        checkboxText = checkboxText + "Nematomumas,";
+                        checkboxText = checkboxText + "Nematomumas, ";
                     }
                     if (cbSwimmer.isChecked()) {
-                        checkboxText = checkboxText + "Plaukiantis";
+                        checkboxText = checkboxText + "Plaukiantis, ";
                     }
                     if (cbThrows.isChecked()) {
-                        checkboxText = checkboxText + "Mėtantis sunkius/aštrius daiktus";
+                        checkboxText = checkboxText + "Mėtantis sunkius/aštrius daiktus, ";
                     }
                     if (cbFast.isChecked()) {
-                        checkboxText = checkboxText + "Greitas";
+                        checkboxText = checkboxText + "Greitas, ";
                     }
                     pokemonas.setAbilities(checkboxText);
 
@@ -126,8 +126,10 @@ public class NewPokemonActivity extends AppCompatActivity {
                     pokemonas.setType(spinnerText);
 
                     db.addPokemon(pokemonas);
+                    pokemonas = db.getByNamePokemonInfo(etName.getText().toString());
 
                     toastMessage(
+                            "ID: " + pokemonas.getId() + "\n" +
                             "Vardas: " + pokemonas.getName() + "\n" +
                             "Svoris: " + pokemonas.getWeight() + " kg\n" +
                             "Ūgis: " + pokemonas.getHeight() + " m\n" +

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.byethost12.kitm.mobiliaplikacija">
 
-    <user-permission android:namne="android.permission=INTERNET" />
+    <user-permission android:name="android.permission=INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,8 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data android:name="android.app.default_searchable"
-                   android:value=".SearchActivity"/>
+                   android:value=".PokemonTableActivity"/>
         <activity android:name=".PokemonTableActivity"
             android:launchMode="singleTop">
             <intent-filter>

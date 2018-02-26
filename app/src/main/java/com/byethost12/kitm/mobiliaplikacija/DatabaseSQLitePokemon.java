@@ -31,6 +31,16 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
             + POKEMON_WEIGHT + " REAL,"
             + POKEMON_HEIGHT + " REAL" + ")";
 
+    String CREATE_TABLE_IF_NOT_EXISTS_POKEMONS_TABLE = "CREATE TABLE IF NOT EXISTS "+
+            TABLE_POKEMONS
+            + "(" +  POKEMON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + POKEMON_NAME + " TEXT,"
+            + POKEMON_TYPE + " TEXT,"
+            + POKEMON_ABILITIES + " TEXT,"
+            + POKEMON_CP +" TEXT,"
+            + POKEMON_WEIGHT + " REAL,"
+            + POKEMON_HEIGHT + " REAL" + ")";
+
     public DatabaseSQLitePokemon(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -103,7 +113,8 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
 
     public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM "+TABLE_POKEMONS,null);
+        db.execSQL(CREATE_TABLE_IF_NOT_EXISTS_POKEMONS_TABLE);
+        Cursor res = db.rawQuery("SELECT * FROM "+TABLE_POKEMONS, null);
         return res;
     }
 

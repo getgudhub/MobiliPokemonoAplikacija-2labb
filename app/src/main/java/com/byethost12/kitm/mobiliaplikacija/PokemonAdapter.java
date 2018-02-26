@@ -10,33 +10,35 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHolder> {
+public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.MyViewHolder> {
 
     private Context context;
     private LayoutInflater inflater;
+    private ArrayList<Pokemonas> arrayList = new ArrayList<>();
     private List<Pokemonas> pokemons = Collections.emptyList();
     private Pokemonas currentPokemon;
 
     public static final String ENTRY = "com.byethost12.kitm.mobiliaplikacija";
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        // each data item is just a string in this case
-        public TextView tvPavadinimas, tvTipas, tvGalia, tvSavybes;
-       // private Context context;
+    PokemonAdapter(ArrayList<Pokemonas> arrayList){
+        this.arrayList = arrayList;
+    }
 
-        public ViewHolder(View v) {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        public TextView tvPavadinimas, tvTipas, tvGalia, tvSavybes;
+
+        public MyViewHolder(View v) {
             super(v);
             tvPavadinimas = (TextView) itemView.findViewById(R.id.pavadinimas);
             tvTipas = (TextView) itemView.findViewById(R.id.tipas);
             tvGalia = (TextView) itemView.findViewById(R.id.galia);
             tvSavybes = (TextView) itemView.findViewById(R.id.savybes);
-            itemView.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
         }
 
         @Override  //visiems saraso elementams
@@ -52,7 +54,8 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset) susieti su esamu lanu ir perduoti pokemonu sarasa is DB
+    // Provide a suitable constructor (depends on the kind of dataset)
+    // susieti su esamu lanu ir perduoti pokemonu sarasa is DB
     public PokemonAdapter(Context context, List<Pokemonas> pokemons) {
         this.context= context;
         this.pokemons = pokemons;
@@ -61,21 +64,15 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
 
     // Create new views (invoked by the layout manager)
     @Override
-    public PokemonAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
-        TextView tv = (TextView) inflater.inflate(R.layout.container_pokemon, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-
-        ViewHolder vh = new ViewHolder(tv);
+    public PokemonAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = (View) inflater.inflate(R.layout.container_pokemon, parent, false);
+        MyViewHolder vh = new MyViewHolder(v);
         return vh;   //return new CustomViewHolder(v)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        ViewHolder vh = new  ViewHolder();
+    public void onBindViewHolder(MyViewHolder vh, int position) {
         currentPokemon = pokemons.get(position);
         vh.tvPavadinimas.setText(currentPokemon.getName());
         vh.tvGalia.setText("Galia: " +currentPokemon.getCp());
@@ -87,6 +84,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return 0;
+        return pokemons.size();
     }
 }

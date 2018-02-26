@@ -19,6 +19,11 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/btnPerziuraRecycler"
+        android:text="PERŽIŪRĖTI Pokemonus 'Recycler' Būdu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
         android:id="@+id/btnRedagavimas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
