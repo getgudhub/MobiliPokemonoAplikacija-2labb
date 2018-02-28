@@ -37,7 +37,7 @@ public class PokemonDeleteActivity extends Activity{
                         public void onClick(View v) {
                             db.deletePokemon(Integer.parseInt(etId.getText().toString()));
                             Toast.makeText(PokemonDeleteActivity.this, "Pokemonas ištrintas", Toast.LENGTH_SHORT).show();
-                            Intent goBack = new Intent(PokemonDeleteActivity.this, ChoiceActivity.class);
+                            Intent goBack = new Intent(PokemonDeleteActivity.this, MenuActivity.class);
                             startActivity(goBack);
                         }
                     });

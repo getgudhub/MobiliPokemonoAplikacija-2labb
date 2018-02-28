@@ -29,7 +29,7 @@ public class NewPokemonActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_entry);
+        setContentView(R.layout.activity_new_pokemon);
 
         setTitle(R.string.new_entry_label);
 

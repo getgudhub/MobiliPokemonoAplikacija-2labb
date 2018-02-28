@@ -213,10 +213,12 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
 
     public ArrayList<Pokemonas> getAllPokemons() {
             ArrayList<Pokemonas> pokemon = new ArrayList<Pokemonas>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_POKEMONS;
 
         SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(CREATE_TABLE_IF_NOT_EXISTS_POKEMONS_TABLE);
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_POKEMONS;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 

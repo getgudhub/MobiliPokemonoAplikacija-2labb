@@ -14,14 +14,17 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class PokemonUpdateActivity extends Activity {
+import static java.lang.String.valueOf;
 
-    Button updateBtn;
+public class PokemonReworkActivity extends Activity {
+
+    Button updateBtn, deleteBtn;
     EditText  etId, etName, etWeight, etHeight;
     RadioGroup rbGroup;
     RadioButton rbStrong, rbMedium, rbWeak;
     CheckBox cbFast, cbInvisible, cbFlying, cbSwimmer, cbThrows;
     Spinner spinner;
+    DatabaseSQLitePokemon db;
 
     int id;
     String name;
@@ -39,9 +42,11 @@ public class PokemonUpdateActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update);
+        setContentView(R.layout.activity_rework);
 
         updateBtn = (Button) findViewById(R.id.updateBtn);
+        deleteBtn = (Button) findViewById(R.id.deleteBtn);
+
         etId = (EditText) findViewById(R.id.etId);
         etName = (EditText) findViewById(R.id.etName);
         etWeight = (EditText) findViewById(R.id.etWeight);
@@ -70,7 +75,7 @@ public class PokemonUpdateActivity extends Activity {
 
         if(bundle !=null){
             id = bundle.getInt("id");
-            etId.setText(""+id);
+            etId.setText(valueOf(id));
             name = bundle.getString("name");
             etName.setText(name);
             weight = bundle.getDouble("weight");
@@ -86,33 +91,9 @@ public class PokemonUpdateActivity extends Activity {
                   rbWeak.setChecked(true);
               }
             checkboxText = bundle.getString("abil");
-              if(checkboxText.equals(cbFast.getText().toString())){
-                  cbFast.setChecked(true);
-              }if(checkboxText.equals(cbFlying.getText().toString())){
-                  cbFlying.setChecked(true);
-              }if(checkboxText.equals(cbInvisible.getText().toString())){
-                  cbInvisible.setChecked(true);
-              }if(checkboxText.equals(cbSwimmer.getText().toString())){
-                  cbSwimmer.setChecked(true);
-              }if(checkboxText.equals(cbThrows.getText().toString())){
-                  cbThrows.setChecked(true);
-              }
+             setCheckBox(checkboxText);
             spinnerText = bundle.getString("type");
-            if(spinnerText.equals(items[0])){ ???
-                spinner.setSelection(0);
-            }else if(spinnerText.equals(items[1])){
-                spinner.setSelection(1);
-            }else if(spinnerText.equals(items[2])){
-                spinner.setSelection(2);
-            }else if(spinnerText.equals(items[3])){
-                spinner.setSelection(3);
-            }else if(spinnerText.equals(items[4])){
-                spinner.setSelection(4);
-            }else if(spinnerText.equals(items[5])){
-                spinner.setSelection(5);
-            }else{
-                spinner.setSelection(6);
-            }
+             setSpinnerText(spinnerText);
 
         }
 
@@ -121,9 +102,7 @@ public class PokemonUpdateActivity extends Activity {
             public void onClick(View view) {
 
                 pokemonas = new Pokemonas();
-                DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(PokemonUpdateActivity.this);
-
-
+                db = new DatabaseSQLitePokemon(PokemonReworkActivity.this);
 
                 if(Validation.isValidId(etId.getText().toString())){
                     if(!db.checkId(Integer.parseInt(etId.getText().toString()))){
@@ -164,20 +143,21 @@ public class PokemonUpdateActivity extends Activity {
                     }
                     pokemonas.setCp(rb);
 
+                    checkboxText = "";
                     if (cbFlying.isChecked()) {
-                        checkboxText = checkboxText + "Skrendantis,";
+                        checkboxText = checkboxText + "Skrendantis, ";
                     }
                     if (cbInvisible.isChecked()) {
-                        checkboxText = checkboxText + "Nematomumas,";
+                        checkboxText = checkboxText + "Nematomumas, ";
                     }
                     if (cbSwimmer.isChecked()) {
-                        checkboxText = checkboxText + "Plaukiantis";
+                        checkboxText = checkboxText + "Plaukiantis, ";
                     }
                     if (cbThrows.isChecked()) {
-                        checkboxText = checkboxText + "Mėtantis sunkius/aštrius daiktus";
+                        checkboxText = checkboxText + "Mėtantis sunkius/aštrius daiktus, ";
                     }
                     if (cbFast.isChecked()) {
-                        checkboxText = checkboxText + "Greitas";
+                        checkboxText = checkboxText + "Greitas, ";
                     }
                     pokemonas.setAbilities(checkboxText);
 
@@ -195,14 +175,88 @@ public class PokemonUpdateActivity extends Activity {
                                     "Sugebėjimai: " + pokemonas.getAbilities() + "\n" +
                                     "Tipas: " + pokemonas.getType());
 
-                    Intent goToSearchActivity = new Intent(PokemonUpdateActivity.this, ChoiceActivity.class);
+                    Intent goToSearchActivity = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
                     startActivity(goToSearchActivity);
 
                 }
             }
         });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                db = new DatabaseSQLitePokemon(PokemonReworkActivity.this);
+                if(!Validation.isValidId(etId.getText().toString()) || !db.checkId(Integer.parseInt(etId.getText().toString()))) {
+                    etId.requestFocus();
+                    etId.setError(getResources().getString(R.string.invalid_id));
+                }else{
+                        showDeleteToast();
+                        deleteBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                db.deletePokemon(Integer.parseInt(etId.getText().toString()));
+                                Toast.makeText(PokemonReworkActivity.this, "Pokemonas ištrintas", Toast.LENGTH_SHORT).show();
+                                Intent goBack = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
+                                startActivity(goBack);
+                            }
+                        });
+                }
+            }
+        });
     }
+
     public void toastMessage(String message){
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
+    public void setCheckBox(String cbText){
+        if(checkboxText.contains(cbFast.getText().toString()+", ")){
+            cbFast.setChecked(true);
+        }if(checkboxText.contains(cbFlying.getText().toString()+", ")){
+            cbFlying.setChecked(true);
+        }if(checkboxText.contains(cbInvisible.getText().toString()+", ")){
+            cbInvisible.setChecked(true);
+        }if(checkboxText.contains(cbSwimmer.getText().toString()+", ")){
+            cbSwimmer.setChecked(true);
+        }if(checkboxText.contains(cbThrows.getText().toString()+", ")){
+            cbThrows.setChecked(true);
+        }
+    }
+
+    public void setSpinnerText(String spinnerText){
+        if(spinnerText.equals(items[0])){
+            spinner.setSelection(0);
+        }else if(spinnerText.equals(items[1])){
+            spinner.setSelection(1);
+        }else if(spinnerText.equals(items[2])){
+            spinner.setSelection(2);
+        }else if(spinnerText.equals(items[3])){
+            spinner.setSelection(3);
+        }else if(spinnerText.equals(items[4])){
+            spinner.setSelection(4);
+        }else if(spinnerText.equals(items[5])){
+            spinner.setSelection(5);
+        }else{
+            spinner.setSelection(6);
+        }
+    }
+
+    public void showDeleteToast(){
+        db = new DatabaseSQLitePokemon(this);
+        Pokemonas pok = new Pokemonas();
+        pok = db.getByIdPokemonInfo(Integer.parseInt(etId.getText().toString()));
+        Toast.makeText(
+                this,
+                "id: " + pok.getId()
+                        + "\n" + "Vardas: " + pok.getName()
+                        + "\n" + "Tipas:  " + pok.getType()
+                        + "\n" + "Sugebėjimai: "+ pok.getAbilities()
+                        + "\n" + "Cp: " + pok.getCp()
+                        + "\n" + "Svoris:  " + pok.getWeight() +" kg"
+                        + "\n" + "Ūgis: "+ pok.getHeight() +" m"
+                        + "\n\n" + "Norėdami ištrinti pokemoną spauskite trinti mygtuką dar kartą",
+                Toast.LENGTH_LONG)
+                .show();
+    }
+
 }

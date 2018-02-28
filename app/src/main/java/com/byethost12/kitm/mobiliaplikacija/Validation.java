@@ -7,7 +7,7 @@ public class Validation {
 
     private static final String VALID_CREDENTIALS_REGEX ="^[A-Za-z0-9.-]{5,13}$";
     private static final String VALID_EMAIL_ADDRESS_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$";
-    private static final String VALID_ID_REGEX = "[0-9]{1,22}$";
+    private static final String VALID_ID_REGEX = "\\d{1,22}$";
     private static final String VALID_SIZE_REGEX = "[0-9.]{1,22}$";
 
 
@@ -25,7 +25,11 @@ public class Validation {
     public static boolean isValidId(String id){
         Pattern emailPattern = Pattern.compile(VALID_ID_REGEX);
         Matcher emailMatcher = emailPattern.matcher(id);
-        return emailMatcher.find();
+        if(id.contains(".")){
+            return false;
+        }else {
+            return emailMatcher.find();
+        }
     }
     public static boolean isValidSize(String size){
         Pattern emailPattern = Pattern.compile(VALID_SIZE_REGEX);

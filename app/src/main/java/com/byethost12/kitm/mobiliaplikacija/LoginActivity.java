@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                         user.setRememberMeKeyForLogin(false);
                     }
 
-                    Intent goToSearchActivity = new Intent(LoginActivity.this, ChoiceActivity.class);
+                    Intent goToSearchActivity = new Intent(LoginActivity.this, PokemonTableActivity.class);
                     startActivity(goToSearchActivity);
                 }
 

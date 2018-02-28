@@ -3,17 +3,16 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:background="@color/colorBG">
+    android:padding="10dp">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorCardViewBg"
-        android:clickable="true">
+        >
 
         <RelativeLayout
+            android:background="@drawable/pokecards"
             android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -25,16 +24,6 @@
                 android:text="Pavadinimas"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/galia"
-                android:text="Id: "
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/galia"

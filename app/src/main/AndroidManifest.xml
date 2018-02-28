@@ -24,19 +24,22 @@
                 android:resource="@xml/searchable"/>
             </activity>
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChoiceActivity" />
+        <activity android:name=".MenuActivity" />
         <activity android:name=".NewPokemonActivity" />
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".RegisterActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".PokemonDeleteActivity" />
         <activity android:name=".PokemonSearchActivity" />
-        <activity android:name=".PokemonUpdateActivity" />
+        <activity android:name=".PokemonReworkActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

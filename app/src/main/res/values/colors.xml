@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorForSpinner">#c9b64c</color>
     <color name="colorCardViewBg">#f2eaba</color>
-    <color name="colorBG">#dc6e5c40</color>
+    <color name="colorBG">#e4592a01</color>
     <color name="colorPrimary">#394fca</color>
     <color name="colorPrimaryDark">#666b8c</color>
     <color name="colorAccent">#FF4081</color>

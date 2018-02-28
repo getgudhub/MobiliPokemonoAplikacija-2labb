@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MobiliPokemonoAplikacija-2lab.iml" filepath="$PROJECT_DIR$/MobiliPokemonoAplikacija-2lab.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MobiliPokemonoAplikacija-master-master.iml" filepath="$PROJECT_DIR$/MobiliPokemonoAplikacija-master-master.iml" />
+      <module fileurl="file://C:\Users\Vidas\AndroidStudioProjects2\MobiliPokemonoAplikacija-2labb\MobiliPokemonoAplikacija-2lab.iml" filepath="C:\Users\Vidas\AndroidStudioProjects2\MobiliPokemonoAplikacija-2labb\MobiliPokemonoAplikacija-2lab.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/MobiliPokemonoAplikacija-2labb.iml" filepath="$PROJECT_DIR$/.idea/MobiliPokemonoAplikacija-2labb.iml" />
+      <module fileurl="file://C:\Users\Vidas\AndroidStudioProjects2\MobiliPokemonoAplikacija-2labb\MobiliPokemonoAplikacija-master-master.iml" filepath="C:\Users\Vidas\AndroidStudioProjects2\MobiliPokemonoAplikacija-2labb\MobiliPokemonoAplikacija-master-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Vidas\AndroidStudioProjects2\MobiliPokemonoAplikacija-2labb\app\app.iml" filepath="C:\Users\Vidas\AndroidStudioProjects2\MobiliPokemonoAplikacija-2labb\app\app.iml" />
     </modules>
   </component>
 </project>

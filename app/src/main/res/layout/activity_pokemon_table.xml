@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBG"
-
     >
 
     <include
@@ -12,19 +11,17 @@
     </include>
 
     <RelativeLayout
+        android:background="@color/colorBG"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
-        android:background="@color/colorBG"
         android:id="@+id/pokemon_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="45dp"
-
         >
-
 
     </android.support.v7.widget.RecyclerView>
         <Button

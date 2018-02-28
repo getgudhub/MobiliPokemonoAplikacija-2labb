@@ -97,6 +97,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:layout_marginTop="6dp"
                     android:text="Cp:"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -129,6 +130,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginTop="6dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -140,7 +142,7 @@
 
                 <CheckBox
                     android:id="@+id/cbFlying"
-                    android:text="Skraidžioti"
+                    android:text="Skrendantis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <CheckBox
@@ -155,32 +157,68 @@
                     android:layout_height="wrap_content" />
                 <CheckBox
                     android:id="@+id/cbThrows"
-                    android:text="Svaidžiojasi sunkais daiktais"
+                    android:text="Mėtantis sunkius/aštrius daiktus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <CheckBox
                     android:id="@+id/cbSwimmer"
-                    android:text="Plaukikas"
+                    android:text="Plaukiantis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
             <TextView
+                android:layout_marginTop="6dp"
                 android:text="Type:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <Spinner
-                android:id="@+id/spinner"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="0dp"
+                android:layout_marginTop="6dp"
+                android:layout_weight=".28"
+                android:background="@drawable/spinnerbg"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginStart="15dp"
+                    android:spinnerMode="dropdown"
+                    android:background="@android:color/transparent"/>
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:src="@drawable/spindrop" />
+
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/updateBtn"
                 android:text="Redaguoti"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/roundshapebtn"/>
+
+            <Button
+                android:id="@+id/deleteBtn"
+                android:text="Ištrinti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/roundshapebtn"
+                android:layout_marginBottom="20dp"/>
 
 
 

@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,12 +33,11 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvId, tvPavadinimas, tvTipas, tvGalia, tvSavybes;
+        public TextView tvPavadinimas, tvTipas, tvGalia, tvSavybes;
         private CardView cardView;
 
         public MyViewHolder(View v)  {
             super(v);
-            tvId = (TextView) itemView.findViewById(R.id.id);
             tvPavadinimas = (TextView) itemView.findViewById(R.id.pavadinimas);
             tvTipas = (TextView) itemView.findViewById(R.id.tipas);
             tvGalia = (TextView) itemView.findViewById(R.id.galia);
@@ -52,7 +50,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.MyViewHo
                     if(clickListener !=null){
                         clickListener.onItemClick(getAdapterPosition(),v);
                         int itemPos = getAdapterPosition();
-                       //Pokemonas pokemonas = pokemons.get(itemPos);
+                        Pokemonas pokemonas = pokemons.get(itemPos); //?necessary
 
                         int pokeId = pokemons.get(itemPos).getId();
                         String pokeName = pokemons.get(itemPos).getName();
@@ -62,7 +60,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.MyViewHo
                         String pokeAbilities = pokemons.get(itemPos).getAbilities();
                         String pokeType = pokemons.get(itemPos).getType();
 
-                        Intent intent =  new Intent(context, PokemonUpdateActivity.class);
+                        Intent intent =  new Intent(context, PokemonReworkActivity.class);
                         intent.putExtra("id", pokeId);
                         intent.putExtra("name", pokeName);
                         intent.putExtra("weight", pokeWeight);
@@ -89,7 +87,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.MyViewHo
     // Create new views (invoked by the layout manager)
     @Override
     public PokemonAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = (View) inflater.inflate(R.layout.container_pokemon, parent, false);
+        View v = (View) inflater.inflate(R.layout.container_pokemon_items, parent, false);
         return new MyViewHolder (v);   //return new CustomViewHolder(v)
     }
 
@@ -100,7 +98,6 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.MyViewHo
         currentPokemon = pokemons.get(position);
         vh.tvPavadinimas.setText(currentPokemon.getName());
         vh.tvGalia.setText("Galia: " +currentPokemon.getCp());
-        vh.tvId.setText("Id: " +currentPokemon.getId());
         vh.tvSavybes.setText("Savybės: " +currentPokemon.getAbilities());
         vh.tvTipas.setText("Tipas: "+ currentPokemon.getType());
 

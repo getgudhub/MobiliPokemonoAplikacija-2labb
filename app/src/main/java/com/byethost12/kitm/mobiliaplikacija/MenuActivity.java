@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class ChoiceActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     Button btnPrideti;
     Button btnPerziureti;
@@ -20,7 +20,7 @@ public class ChoiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choice);
+        setContentView(R.layout.activity_menu);
 
 
         setTitle(R.string.choice_label);
@@ -36,7 +36,7 @@ public class ChoiceActivity extends AppCompatActivity {
         btnPrideti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChoiceActivity.this, NewPokemonActivity.class);
+                Intent intent = new Intent(MenuActivity.this, NewPokemonActivity.class);
                 startActivity(intent);
             }
         });
@@ -67,7 +67,7 @@ public class ChoiceActivity extends AppCompatActivity {
         perziuraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChoiceActivity.this, PokemonTableActivity.class);
+                Intent intent = new Intent(MenuActivity.this, PokemonTableActivity.class);
                 startActivity(intent);
             }
         });
@@ -94,7 +94,7 @@ public class ChoiceActivity extends AppCompatActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToDeleteActivity = new Intent(ChoiceActivity.this, PokemonDeleteActivity.class);
+                Intent goToDeleteActivity = new Intent(MenuActivity.this, PokemonDeleteActivity.class);
                 startActivity(goToDeleteActivity);
             }
         });
@@ -102,7 +102,7 @@ public class ChoiceActivity extends AppCompatActivity {
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToSearchActivity = new Intent(ChoiceActivity.this, PokemonSearchActivity.class);
+                Intent goToSearchActivity = new Intent(MenuActivity.this, PokemonSearchActivity.class);
                 startActivity(goToSearchActivity);
             }
         });
@@ -110,14 +110,14 @@ public class ChoiceActivity extends AppCompatActivity {
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToUpdateActivity = new Intent(ChoiceActivity.this, PokemonUpdateActivity.class);
+                Intent goToUpdateActivity = new Intent(MenuActivity.this, PokemonReworkActivity.class);
                 startActivity(goToUpdateActivity);
             }
         });
     }
 
     public void showMessage(String title, String Message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ChoiceActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
         builder.setCancelable(true);
         builder.setTitle(title);
         builder.setMessage(Message);

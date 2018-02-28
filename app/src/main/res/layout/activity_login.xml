@@ -9,12 +9,9 @@
     android:orientation="vertical"
     android:padding="20dp"
     android:gravity="center_vertical"
-    android:background="@color/colorTint">
+    android:background="@drawable/pokemonbg">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:src="@drawable/background"/>
+
 
     <TextView
         android:layout_width="match_parent"
@@ -66,20 +63,24 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="25dp" />
+        android:layout_height="55dp" />
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Prisijungti"/>
+        android:text="Prisijungti"
+        android:layout_margin="10dp"
+        android:background="@drawable/roundshapebtn"/>
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registruotis"/>
+        android:text="Registruotis"
+        android:layout_margin="10dp"
+        android:background="@drawable/roundshapebtn"/>
 
-
+    /ImageView>
 
 </LinearLayout>
