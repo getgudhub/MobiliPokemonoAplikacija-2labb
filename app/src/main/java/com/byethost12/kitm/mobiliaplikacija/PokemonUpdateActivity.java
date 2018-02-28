@@ -98,7 +98,7 @@ public class PokemonUpdateActivity extends Activity {
                   cbThrows.setChecked(true);
               }
             spinnerText = bundle.getString("type");
-            if(spinnerText.equals(items[0])){
+            if(spinnerText.equals(items[0])){ ???
                 spinner.setSelection(0);
             }else if(spinnerText.equals(items[1])){
                 spinner.setSelection(1);
