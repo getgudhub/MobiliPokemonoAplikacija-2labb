@@ -3,28 +3,37 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBG"
+
     >
 
     <include
         layout="@layout/toolbar_layout">
-
     </include>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
     <android.support.v7.widget.RecyclerView
-            android:id="@+id/pokemon_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp">
+        android:background="@color/colorBG"
+        android:id="@+id/pokemon_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="45dp"
+
+        >
+
 
     </android.support.v7.widget.RecyclerView>
-
-    <Button
-        android:gravity="center"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:text="Pridėti"
-        android:id="@+id/btnPrideti"
-        android:layout_margin="50dp" />
-
+        <Button
+            android:id="@+id/btnPrideti"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center|bottom"
+            android:text="Pridėti pokemoną" />
+    </RelativeLayout>
 
 </LinearLayout>

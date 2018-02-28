@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@color/colorBG">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorCardViewBg"
+        android:clickable="true">
 
         <RelativeLayout
+            android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -17,43 +22,52 @@
                 android:id="@+id/pavadinimas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Pavadinimas"
-                android:textColor="@color/colorAccent"
-                android:layout_marginLeft="5dp"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorAccent" />
 
-        <TextView
-            android:id="@+id/galia"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Galia: "
-            android:layout_alignParentRight="true"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_below="@+id/pavadinimas" />
+            <TextView
+                android:id="@+id/id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/galia"
+                android:text="Id: "
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorPrimary" />
 
-        <TextView
-            android:id="@+id/tipas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tipas: "
-            android:layout_margin="5dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_below="@+id/pavadinimas"/>
+            <TextView
+                android:id="@+id/galia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/pavadinimas"
+                android:text="Galia: "
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorPrimaryDark" />
 
-        <TextView
-            android:id="@+id/savybes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Savybės: "
-            android:layout_margin="5dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_below="@+id/tipas"/>
+            <TextView
+                android:id="@+id/tipas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pavadinimas"
+                android:layout_margin="5dp"
+                android:text="Tipas: "
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/savybes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tipas"
+                android:layout_margin="5dp"
+                android:text="Savybės: "
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorPrimaryDark" />
 
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
-</RelativeLayout>
+</LinearLayout>

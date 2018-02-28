@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class PokemonTableActivity extends AppCompatActivity {
+public class PokemonTableActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private RecyclerView mRecyclerView;
     private SearchView searchView;
@@ -44,14 +46,20 @@ public class PokemonTableActivity extends AppCompatActivity {
 
         DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(PokemonTableActivity.this);
         pokemonList = db.getAllPokemons();
-        adapter = new PokemonAdapter(pokemonList);
+        adapter = new PokemonAdapter(this, pokemonList);
         mRecyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new PokemonAdapter.ClickListener(){
+            @Override
+            public void onItemClick(int position, View v) {
+                //starts new activity on Card click from adapter's class, ViewHolder method
+            }
+        });
 
         btnPrideti = (Button) findViewById(R.id.btnPrideti);
         btnPrideti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(PokemonTableActivity.this, NewPokemonActivity.class);
                 startActivity(intent);
             }
@@ -64,11 +72,12 @@ public class PokemonTableActivity extends AppCompatActivity {
         SearchManager sm = (SearchManager) PokemonTableActivity.this.getSystemService(Context.SEARCH_SERVICE);
         if(searchItem != null){
             searchView = (SearchView) searchItem.getActionView();
+            searchView.setOnQueryTextListener(PokemonTableActivity.this);
         }
-        if(searchView !=null){
+        /*if(searchView != null){
             searchView.setSearchableInfo(sm.getSearchableInfo(PokemonTableActivity.this.getComponentName()));
             searchView.setIconified(false);
-        }
+        }*/
         return true;
     }
 
@@ -89,6 +98,23 @@ public class PokemonTableActivity extends AppCompatActivity {
             new AsynchFetch(query).execute();
         }
     }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        newText = newText.toLowerCase();
+        ArrayList<Pokemonas> newList = new ArrayList<>();
+        for(Pokemonas pokemon : pokemonList){
+            String pavadinimas = pokemon.getName().toLowerCase();
+            if(pavadinimas.contains(newText)) newList.add(pokemon);
+        }
+        adapter.setFilter(newList);
+        return false;
+    }
+
     private class AsynchFetch extends AsyncTask<String,String,String>{
         ProgressDialog progressDialog = new ProgressDialog(PokemonTableActivity.this);
         String searchQuery;
@@ -123,7 +149,7 @@ public class PokemonTableActivity extends AppCompatActivity {
             super.onPostExecute(result);
             progressDialog.dismiss();
             if(result.equals("no rows")){
-                Toast.makeText(PokemonTableActivity.this, "Pagal paieška nerasta duomnų", Toast.LENGTH_LONG).show();
+                Toast.makeText(PokemonTableActivity.this, "Pagal paieška nerasta duomenų", Toast.LENGTH_LONG).show();
             }else{// setup and hand over list pokemonai to recycleView
                 mRecyclerView = (RecyclerView) findViewById(R.id.pokemon_list);
                 PokemonAdapter pa = new PokemonAdapter(PokemonTableActivity.this, pokemonList);

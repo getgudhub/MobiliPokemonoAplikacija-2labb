@@ -119,8 +119,8 @@ public class NewPokemonActivity extends AppCompatActivity {
                     }
                     pokemonas.setAbilities(checkboxText);
 
-                    Intent goToSearchActivity = new Intent(NewPokemonActivity.this, ChoiceActivity.class);
-                    startActivity(goToSearchActivity);
+                    Intent intent = new Intent(NewPokemonActivity.this, PokemonTableActivity.class);
+                    startActivity(intent);
 
                     spinnerText = spinner.getSelectedItem().toString();
                     pokemonas.setType(spinnerText);

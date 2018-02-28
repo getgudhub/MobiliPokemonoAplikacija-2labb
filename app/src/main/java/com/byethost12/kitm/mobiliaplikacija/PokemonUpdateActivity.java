@@ -23,6 +23,14 @@ public class PokemonUpdateActivity extends Activity {
     CheckBox cbFast, cbInvisible, cbFlying, cbSwimmer, cbThrows;
     Spinner spinner;
 
+    int id;
+    String name;
+    double weight;
+    double height;
+    String rb = "";
+    String checkboxText = "";
+    String spinnerText = "";
+
     Pokemonas pokemonas;
 
     String items[] = {"Vanduo", "Ugnis", "Tamsa", "Žolytė", "Elektra", "Žemė", "Oras"};
@@ -56,21 +64,74 @@ public class PokemonUpdateActivity extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinner.setAdapter(adapter);
 
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+
+        if(bundle !=null){
+            id = bundle.getInt("id");
+            etId.setText(""+id);
+            name = bundle.getString("name");
+            etName.setText(name);
+            weight = bundle.getDouble("weight");
+            etWeight.setText(""+weight);
+            height = bundle.getDouble("height");
+            etHeight.setText(""+height);
+            rb = bundle.getString("CP");
+              if(rb.equals(rbStrong.getText().toString())){
+                  rbStrong.setChecked(true);
+              }else if(rb.equals(rbMedium.getText().toString())){
+                    rbMedium.setChecked(true);
+              }else{
+                  rbWeak.setChecked(true);
+              }
+            checkboxText = bundle.getString("abil");
+              if(checkboxText.equals(cbFast.getText().toString())){
+                  cbFast.setChecked(true);
+              }if(checkboxText.equals(cbFlying.getText().toString())){
+                  cbFlying.setChecked(true);
+              }if(checkboxText.equals(cbInvisible.getText().toString())){
+                  cbInvisible.setChecked(true);
+              }if(checkboxText.equals(cbSwimmer.getText().toString())){
+                  cbSwimmer.setChecked(true);
+              }if(checkboxText.equals(cbThrows.getText().toString())){
+                  cbThrows.setChecked(true);
+              }
+            spinnerText = bundle.getString("type");
+            if(spinnerText.equals(items[0])){
+                spinner.setSelection(0);
+            }else if(spinnerText.equals(items[1])){
+                spinner.setSelection(1);
+            }else if(spinnerText.equals(items[2])){
+                spinner.setSelection(2);
+            }else if(spinnerText.equals(items[3])){
+                spinner.setSelection(3);
+            }else if(spinnerText.equals(items[4])){
+                spinner.setSelection(4);
+            }else if(spinnerText.equals(items[5])){
+                spinner.setSelection(5);
+            }else{
+                spinner.setSelection(6);
+            }
+
+        }
+
         updateBtn.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View view) {
 
-                int id;
-                String name;
-                double weight;
-                double height;
-                String rb = "";
-                String spinnerText = "";
-
                 pokemonas = new Pokemonas();
                 DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(PokemonUpdateActivity.this);
 
-                if(etId.getText().toString().equals("") || db.checkId(Integer.parseInt(etId.getText().toString()))==false){
+
+
+                if(Validation.isValidId(etId.getText().toString())){
+                    if(!db.checkId(Integer.parseInt(etId.getText().toString()))){
+                        etId.requestFocus();
+                        etId.setError(getResources().getString(R.string.id_invalid));
+                    }
+                }
+                if(etId.getText().toString().equals("") || !Validation.isValidId(etId.getText().toString()) ){
                     etId.requestFocus();
                     etId.setError(getResources().getString(R.string.id_invalid));
                 }else if (etName.getText().toString().equals("") || !Validation.isValidCredentials(etName.getText().toString())) {
@@ -102,8 +163,6 @@ public class PokemonUpdateActivity extends Activity {
                         rb = rbWeak.getText().toString();
                     }
                     pokemonas.setCp(rb);
-
-                    String checkboxText = "";
 
                     if (cbFlying.isChecked()) {
                         checkboxText = checkboxText + "Skrendantis,";
