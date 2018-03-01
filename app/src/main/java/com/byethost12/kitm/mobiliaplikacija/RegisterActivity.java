@@ -29,6 +29,9 @@ public class RegisterActivity extends Activity {
                         if (etUsername.getText().toString().equals("") || !Validation.isValidCredentials(etUsername.getText().toString())) {
                             etUsername.requestFocus();
                             etUsername.setError(getResources().getString(R.string.invalid_username));
+                        }else if(dbSQLite.checkName(etUsername.getText().toString())){
+                                etUsername.requestFocus();
+                                etUsername.setError("Vartotojo vardas užimtas");
                         }else if(etPassword.getText().toString().equals("") || !Validation.isValidCredentials(etPassword.getText().toString())) {
                             etPassword.requestFocus();
                             etPassword.setError(getResources().getString(R.string.invalid_password));
@@ -44,7 +47,7 @@ public class RegisterActivity extends Activity {
                             dbSQLite.addUser(user);
 
                             Toast.makeText(RegisterActivity.this,
-                                    "Thank you for registering "+ etUsername.getText().toString(),
+                                    "Ačiū, kad užsiregistravote "+ etUsername.getText().toString(),
                                     Toast.LENGTH_LONG).show();
 
                             Intent toLoginActivity = new Intent(RegisterActivity.this, LoginActivity.class);

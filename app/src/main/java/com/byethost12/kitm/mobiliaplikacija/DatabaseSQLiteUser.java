@@ -132,4 +132,16 @@ public class DatabaseSQLiteUser extends SQLiteOpenHelper {
         return false;
 
     }
+    public boolean checkName(String  name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String Query = "Select * from " + TABLE_USERS + " where " + USER_NAME + " = '" + name +"'";
+        Cursor cursor = db.rawQuery(Query, null);
+        if(cursor.getCount() <= 0) {
+            cursor.close();
+            return false;
+        }else{
+            cursor.close();
+            return true;
+        }
+    }
 }

@@ -70,7 +70,7 @@ public class NewPokemonActivity extends AppCompatActivity {
                 pokemonas = new Pokemonas();
                 DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(NewPokemonActivity.this);
 
-                if (etName.getText().toString().equals("") || !Validation.isValidCredentials(etName.getText().toString())) {
+                if (etName.getText().toString().equals("") || !Validation.isValidPokemonName(etName.getText().toString())) {
                     etName.requestFocus();
                     etName.setError(getResources().getString(R.string.name_invalid));
                 } else if (etWeight.getText().toString().equals("") || !Validation.isValidSize(etWeight.getText().toString())) {

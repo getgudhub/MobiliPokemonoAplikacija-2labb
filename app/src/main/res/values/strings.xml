@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mobili Aplikacija</string>
+    <string name="app_name">Pokemonų registracija</string>
 
     <string name="login_label">Prisijungimas</string>
     <string name="register_label">Naujas vartotojas</string>

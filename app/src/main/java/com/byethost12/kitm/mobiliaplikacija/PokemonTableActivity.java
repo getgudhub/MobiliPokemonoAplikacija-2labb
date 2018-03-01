@@ -74,10 +74,6 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
             searchView = (SearchView) searchItem.getActionView();
             searchView.setOnQueryTextListener(PokemonTableActivity.this);
         }
-        /*if(searchView != null){
-            searchView.setSearchableInfo(sm.getSearchableInfo(PokemonTableActivity.this.getComponentName()));
-            searchView.setIconified(false);
-        }*/
         return true;
     }
 
