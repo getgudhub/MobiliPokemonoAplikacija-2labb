@@ -4,9 +4,11 @@ package com.byethost12.kitm.mobiliaplikacija;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.SearchView;
@@ -36,7 +38,6 @@ public class PokemonReworkActivity extends AppCompatActivity {
     Spinner spinner;
     DatabaseSQLitePokemon db;
     Toolbar toolbar;
-    MenuItem returnItem;
 
     int id;
     String name;
@@ -47,6 +48,7 @@ public class PokemonReworkActivity extends AppCompatActivity {
     String spinnerText = "";
 
     Pokemonas pokemonas;
+    Pokemonas oldPokemonas;
 
     String items[] = {"Vanduo", "Ugnis", "Tamsa", "Žolytė", "Elektra", "Žemė", "Oras"};
 
@@ -88,13 +90,18 @@ public class PokemonReworkActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
 
         if(bundle !=null){
+            oldPokemonas = new Pokemonas();
             id = bundle.getInt("id");
+            oldPokemonas.setId(id);
             etId.setText(valueOf(id));
             name = bundle.getString("name");
+            oldPokemonas.setName(name);
             etName.setText(name);
             weight = bundle.getDouble("weight");
+            oldPokemonas.setWeight(weight);
             etWeight.setText(""+weight);
             height = bundle.getDouble("height");
+            oldPokemonas.setHeight(height);
             etHeight.setText(""+height);
             rb = bundle.getString("CP");
               if(rb.equals(rbStrong.getText().toString())){
@@ -104,11 +111,13 @@ public class PokemonReworkActivity extends AppCompatActivity {
               }else{
                   rbWeak.setChecked(true);
               }
+            oldPokemonas.setCp(rb);
             checkboxText = bundle.getString("abil");
+            oldPokemonas.setAbilities(checkboxText);
              setCheckBox(checkboxText);
             spinnerText = bundle.getString("type");
+            oldPokemonas.setType(spinnerText);
              setSpinnerText(spinnerText);
-
         }
 
         updateBtn.setOnClickListener( new View.OnClickListener(){
@@ -184,6 +193,7 @@ public class PokemonReworkActivity extends AppCompatActivity {
 
                     Intent goToSearchActivity = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
                     startActivity(goToSearchActivity);
+                    PokemonReworkActivity.this.finish();
 
                 }
             }
@@ -205,19 +215,13 @@ public class PokemonReworkActivity extends AppCompatActivity {
                             Toast.makeText(PokemonReworkActivity.this, "Pokemonas ištrintas", Toast.LENGTH_SHORT).show();
                             Intent goBack = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
                             startActivity(goBack);
+                            PokemonReworkActivity.this.finish();
                         }
                     });
                 }
             }
         });
 
-        returnItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                
-                return false;
-            }
-        });
     }
 
 
@@ -226,12 +230,47 @@ public class PokemonReworkActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.pokemon_rework_menu, menu);
         MenuItem returnItem = menu.findItem(R.id.actionBack);
+        returnItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if (!updatePokemon()) {
+                    Toast.makeText(PokemonReworkActivity.this, "Pakitimai neatlikti", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
+                    startActivity(intent);
+                    PokemonReworkActivity.this.finish();
+                } else {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PokemonReworkActivity.this);
+                    builder.setCancelable(true);
+                    builder.setTitle("Ar norėtumėte išeiti neišsisaugoję?");
+                    builder.setMessage("Pasirinkę 'Taip' pakitimai bus išsaugoti, jeigu įrašyti/pasirinkti teisingai.")
+                            .setPositiveButton("Taip", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    db.updatePokemon(pokemonas);
+                                    Intent intent = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
+                                    startActivity(intent);
+                                    PokemonReworkActivity.this.finish();
+                                }
+                            })
+                            .setNegativeButton("Ne", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    builder.show();
+                }return false;
+            }
+        });
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        //super.onBackPressed();
     }
 
     public void toastMessage(String message){
@@ -284,13 +323,83 @@ public class PokemonReworkActivity extends AppCompatActivity {
 
     public void showDeleteToast(){
         db = new DatabaseSQLitePokemon(this);
-        Pokemonas pok = new Pokemonas();
-        pok = db.getByIdPokemonInfo(Integer.parseInt(etId.getText().toString()));
         Toast.makeText(
                 this,
                 "Norėdami ištrinti pokemoną spauskite trinti mygtuką dar kartą",
                 Toast.LENGTH_SHORT)
                 .show();
     }
+
+    public boolean updatePokemon(){
+                pokemonas = new Pokemonas();
+                db = new DatabaseSQLitePokemon(PokemonReworkActivity.this);
+
+                if(Validation.isValidId(etId.getText().toString())){
+                    if(!db.checkId(Integer.parseInt(etId.getText().toString()))){
+                        return false;
+                    }
+                }
+                if(etId.getText().toString().equals("") || !Validation.isValidId(etId.getText().toString()) ){
+                    return false;
+                }else if (etName.getText().toString().equals("") || !Validation.isValidPokemonName(etName.getText().toString())) {
+                    return false;
+                } else if (etWeight.getText().toString().equals("") || !Validation.isValidSize(etWeight.getText().toString())) {
+                    return false;
+                } else if (etHeight.getText().toString().equals("") || !Validation.isValidSize(etHeight.getText().toString())) {
+                    return false;
+                } else if (!(cbFlying.isChecked() || cbInvisible.isChecked() || cbThrows.isChecked() || cbFast.isChecked() || cbSwimmer.isChecked())) {
+                    return false;
+                } else {
+                    id = Integer.parseInt(etId.getText().toString());
+                    pokemonas.setId(id);
+                    name = etName.getText().toString();
+                    pokemonas.setName(name);
+                    weight = Double.parseDouble(etWeight.getText().toString());
+                    pokemonas.setWeight(weight);
+                    height = Double.parseDouble(etHeight.getText().toString());
+                    pokemonas.setHeight(height);
+                    if (rbStrong.isChecked()) {
+                        rb = rbStrong.getText().toString();
+                    } else if (rbMedium.isChecked()) {
+                        rb = rbMedium.getText().toString();
+                    } else {
+                        rb = rbWeak.getText().toString();
+                    }
+                    pokemonas.setCp(rb);
+
+                    checkboxText = "";
+                    if (cbFlying.isChecked()) {
+                        checkboxText = checkboxText + "Skrendantis, ";
+                    }
+                    if (cbInvisible.isChecked()) {
+                        checkboxText = checkboxText + "Nematomumas, ";
+                    }
+                    if (cbSwimmer.isChecked()) {
+                        checkboxText = checkboxText + "Plaukiantis, ";
+                    }
+                    if (cbThrows.isChecked()) {
+                        checkboxText = checkboxText + "Mėtantis sunkius/aštrius daiktus, ";
+                    }
+                    if (cbFast.isChecked()) {
+                        checkboxText = checkboxText + "Greitas, ";
+                    }
+                    pokemonas.setAbilities(checkboxText);
+
+                    spinnerText = spinner.getSelectedItem().toString();
+                    pokemonas.setType(spinnerText);
+
+                    if(pokemonas.getId()==oldPokemonas.getId()&&
+                    pokemonas.getAbilities().equals(oldPokemonas.getAbilities())&&
+                            pokemonas.getCp().equals(oldPokemonas.getCp())&&
+                            pokemonas.getHeight()==oldPokemonas.getHeight()&&
+                            pokemonas.getWeight()==oldPokemonas.getWeight()&&
+                            pokemonas.getName().equals(oldPokemonas.getName())&&
+                            pokemonas.getType().equals(oldPokemonas.getType())){
+                        return false;
+                    }else{
+                        return true;
+                    }
+                }
+            }
 
 }

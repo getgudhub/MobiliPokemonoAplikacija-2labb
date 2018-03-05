@@ -1,8 +1,12 @@
 package com.byethost12.kitm.mobiliaplikacija;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,6 +25,7 @@ public class NewPokemonActivity extends AppCompatActivity {
     RadioButton rbStrong, rbMedium, rbWeak;
     CheckBox cbFast, cbInvisible, cbFlying, cbSwimmer, cbThrows;
     Spinner spinner;
+    Toolbar toolbar;
 
     Pokemonas pokemonas;
 
@@ -31,7 +36,9 @@ public class NewPokemonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_pokemon);
 
-        setTitle(R.string.new_entry_label);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.new_entry_label);
+        setSupportActionBar(toolbar);
 
         btnSubmit = (Button) findViewById(R.id.btnAdd);
         etName = (EditText) findViewById(R.id.etName);
@@ -121,6 +128,7 @@ public class NewPokemonActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(NewPokemonActivity.this, PokemonTableActivity.class);
                     startActivity(intent);
+                    NewPokemonActivity.this.finish();
 
                     spinnerText = spinner.getSelectedItem().toString();
                     pokemonas.setType(spinnerText);
@@ -128,22 +136,139 @@ public class NewPokemonActivity extends AppCompatActivity {
                     db.addPokemon(pokemonas);
                     pokemonas = db.getByNamePokemonInfo(etName.getText().toString());
 
-                    toastMessage(
-                            "ID: " + pokemonas.getId() + "\n" +
-                            "Vardas: " + pokemonas.getName() + "\n" +
-                            "Svoris: " + pokemonas.getWeight() + " kg\n" +
-                            "Ūgis: " + pokemonas.getHeight() + " m\n" +
-                            "CP: " + pokemonas.getCp() + "\n" +
-                            "Sugebėjimai: " + pokemonas.getAbilities() + "\n" +
-                            "Tipas: " + pokemonas.getType());
-
+                    toastMessage(pokemonas);
                 }
 
             }
         });
     }
 
-    public void toastMessage(String message){
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    public void toastMessage(Pokemonas pokemonas){
+        Toast.makeText(this,
+                        "ID: " + pokemonas.getId() + "\n" +
+                        "Vardas: " + pokemonas.getName() + "\n" +
+                        "Svoris: " + pokemonas.getWeight() + " kg\n" +
+                        "Ūgis: " + pokemonas.getHeight() + " m\n" +
+                        "CP: " + pokemonas.getCp() + "\n" +
+                        "Sugebėjimai: " + pokemonas.getAbilities() + "\n" +
+                        "Tipas: " + pokemonas.getType()
+                , Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.pokemon_rework_menu, menu);
+        MenuItem returnItem = menu.findItem(R.id.actionBack);
+        returnItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(NewPokemonActivity.this);
+                builder.setCancelable(true);
+                builder.setTitle("Ar norėtumėte išeiti neišsisaugoję?");
+                builder.setMessage("Pasirinkę 'Taip' pakitimai bus išsaugoti, jeigu įrašyti/pasirinkti teisingai.")
+                        .setPositiveButton("Taip", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if(!createPokemon()){
+                                    Toast.makeText(NewPokemonActivity.this,"Rasta klaidų, todėl pokemonas neišsaugotas", Toast.LENGTH_SHORT);
+                                }
+                                Intent intent = new Intent(NewPokemonActivity.this, PokemonTableActivity.class);
+                                startActivity(intent);
+                                NewPokemonActivity.this.finish();
+                            }
+                        })
+                        .setNegativeButton("Ne", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(NewPokemonActivity.this, PokemonTableActivity.class);
+                                startActivity(intent);
+                                NewPokemonActivity.this.finish();
+                            }
+                        });
+                builder.show();
+                return false;
+            }
+        });
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onBackPressed(){
+        //super.onBackPressed();
+    }
+
+    public boolean createPokemon(){
+        int id;
+        String name;
+        double weight;
+        double height;
+        String rb = "";
+        String spinnerText = "";
+
+        pokemonas = new Pokemonas();
+        DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(NewPokemonActivity.this);
+
+        if (etName.getText().toString().equals("") || !Validation.isValidPokemonName(etName.getText().toString())) {
+            return false;
+        } else if (etWeight.getText().toString().equals("") || !Validation.isValidSize(etWeight.getText().toString())) {
+            return false;
+        } else if (etHeight.getText().toString().equals("") || !Validation.isValidSize(etHeight.getText().toString())) {
+            return false;
+        } else if (!(cbFlying.isChecked() || cbInvisible.isChecked() || cbThrows.isChecked() || cbFast.isChecked() || cbSwimmer.isChecked())) {
+            return false;
+        } else {
+            // id = Integer.parseInt(etId.getText().toString());
+            // pokemonas.setId(id);
+            name = etName.getText().toString();
+            pokemonas.setName(name);
+            weight = Double.parseDouble(etWeight.getText().toString());
+            pokemonas.setWeight(weight);
+            height = Double.parseDouble(etHeight.getText().toString());
+            pokemonas.setHeight(height);
+            if (rbStrong.isChecked()) {
+                rb = rbStrong.getText().toString();
+            } else if (rbMedium.isChecked()) {
+                rb = rbMedium.getText().toString();
+            } else {
+                rb = rbWeak.getText().toString();
+            }
+            pokemonas.setCp(rb);
+
+            String checkboxText = "";
+
+            if (cbFlying.isChecked()) {
+                checkboxText = checkboxText + "Skrendantis, ";
+            }
+            if (cbInvisible.isChecked()) {
+                checkboxText = checkboxText + "Nematomumas, ";
+            }
+            if (cbSwimmer.isChecked()) {
+                checkboxText = checkboxText + "Plaukiantis, ";
+            }
+            if (cbThrows.isChecked()) {
+                checkboxText = checkboxText + "Mėtantis sunkius/aštrius daiktus, ";
+            }
+            if (cbFast.isChecked()) {
+                checkboxText = checkboxText + "Greitas, ";
+            }
+            pokemonas.setAbilities(checkboxText);
+
+            Intent intent = new Intent(NewPokemonActivity.this, PokemonTableActivity.class);
+            startActivity(intent);
+
+            spinnerText = spinner.getSelectedItem().toString();
+            pokemonas.setType(spinnerText);
+
+            db.addPokemon(pokemonas);
+            pokemonas = db.getByNamePokemonInfo(etName.getText().toString());
+
+            toastMessage(pokemonas);
+            return true;
+        }
     }
 }

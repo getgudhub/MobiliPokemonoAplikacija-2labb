@@ -42,6 +42,8 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
         layoutManager = new LinearLayoutManager(PokemonTableActivity.this);
         mRecyclerView.setLayoutManager(layoutManager);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.search_label);
+        toolbar.setTitleMarginEnd(20);
         setSupportActionBar(toolbar);
 
         DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(PokemonTableActivity.this);
@@ -66,9 +68,21 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
         });
     }
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.pokemon_table_menu,menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.pokemon_table_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.actionSearch);
+        MenuItem returnItem = menu.findItem(R.id.actionBack);
+        returnItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent(PokemonTableActivity.this, LoginActivity.class);
+                startActivity(intent);
+                PokemonTableActivity.this.finish();
+
+                return true;
+            }
+        });
+
         SearchManager sm = (SearchManager) PokemonTableActivity.this.getSystemService(Context.SEARCH_SERVICE);
         if(searchItem != null){
             searchView = (SearchView) searchItem.getActionView();
@@ -96,9 +110,15 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
     }
 
     @Override
+    public void onBackPressed(){
+
+    }
+
+    @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
     }
+
     @Override
     public boolean onQueryTextChange(String newText) {
         newText = newText.toLowerCase();

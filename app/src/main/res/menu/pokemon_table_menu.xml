@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/actionBack"
+        android:gravity="center_vertical|start"
+        android:layout_gravity="left"
+        android:title="Grįžti"
+        android:icon="@drawable/returnicon"
+        app:showAsAction="ifRoom|collapseActionView" />
     <item android:id="@+id/actionSearch"
+        android:layout_gravity="right"
         android:title="@string/search_label"
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="always|collapseActionView"
