@@ -135,7 +135,8 @@ public class MenuActivity extends AppCompatActivity {
                         + "\n" + "Abilities: "+ c.getString(3)
                         + "\n" + "Cp: " + c.getString(4)
                         + "\n" + "Weight:  " + c.getString(5)
-                        + "\n" + "Height: "+ c.getString(6),
+                        + "\n" + "Height: "+ c.getString(6)
+                        + "\n" + "UserId: "+ c.getInt(7),
                 Toast.LENGTH_LONG)
                 .show();
     }*/

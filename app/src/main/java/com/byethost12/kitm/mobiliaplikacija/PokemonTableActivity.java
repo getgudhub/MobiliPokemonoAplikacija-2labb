@@ -24,6 +24,10 @@ import java.util.ArrayList;
 
 public class PokemonTableActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
+
+    DatabaseSQLiteUser dbUser = new DatabaseSQLiteUser(PokemonTableActivity.this);
+    DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(PokemonTableActivity.this);
+    
     private RecyclerView mRecyclerView;
     private SearchView searchView;
     private RecyclerView.LayoutManager layoutManager;
@@ -31,9 +35,12 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
     private PokemonAdapter adapter;
     Button btnPrideti;
     Toolbar toolbar;
+    User user;
+    String name = "";
+    int id;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pokemon_table);
 
@@ -46,8 +53,22 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
         toolbar.setTitleMarginEnd(20);
         setSupportActionBar(toolbar);
 
-        DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(PokemonTableActivity.this);
-        pokemonList = db.getAllPokemons();
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        
+        if(bundle !=null){
+            name = bundle.getString("name");
+        }
+        
+        user = dbUser.getUser(name);
+        id = user.getId();
+        
+        if(dbUser.isAdmin(user.getUserlevel()))
+        {pokemonList = db.getAllPokemons();
+        }else{
+            pokemonList = db.getUserPokemons(user.getId());
+        }
         adapter = new PokemonAdapter(this, pokemonList);
         mRecyclerView.setAdapter(adapter);
 
@@ -63,6 +84,8 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PokemonTableActivity.this, NewPokemonActivity.class);
+                intent.putExtra("userid", id);
+                intent.putExtra("name", name);
                 startActivity(intent);
             }
         });
@@ -150,7 +173,7 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
         @Override
         protected String doInBackground(String... strings) {
             DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(PokemonTableActivity.this);
-            pokemonList = db.getAllPokemons();
+            pokemonList = db.getUserPokemons(user.getId());
             if(pokemonList.isEmpty()){
                 return "no rows";
             }else{

@@ -234,7 +234,7 @@ public class PokemonReworkActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 if (!updatePokemon()) {
-                    Toast.makeText(PokemonReworkActivity.this, "Pakitimai neatlikti", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PokemonReworkActivity.this, "Pakitimų nėra", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
                     startActivity(intent);
                     PokemonReworkActivity.this.finish();

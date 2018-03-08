@@ -9,11 +9,13 @@ import android.content.SharedPreferences;
 
 public class User {
     private int id;
-    private String userlevel;
+    private int userlevel;
     private String username;
     private String password;
     private String email;
     private static final String PREFERENCES_FILE_NAME = "com.byethost12.kitm.mobiliaplikacija";
+    private static final String USER_ID_KEY = "userId";
+    private static final String USER_LEVEL = "userlevel";
     private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
     private static final String REMEMBER_ME_KEY = "rememberMe";
@@ -26,7 +28,14 @@ public class User {
 
     }
     //skirtas register activity registruojant nauja vartotoja
-    public User(String userlevel, String username, String password, String email) {
+    public User(int userlevel, String username, String password, String email) {
+        this.userlevel = userlevel;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+    public User(int id, int userlevel, String username, String password, String email) {
+        this.id = id;
         this.userlevel = userlevel;
         this.username = username;
         this.password = password;
@@ -64,11 +73,11 @@ public class User {
         this.username = username;
     }
 
-    public String getUserlevel() {
+    public int getUserlevel() {
         return userlevel;
     }
 
-    public void setUserlevel(String userlevel) {
+    public void setUserlevel(int userlevel) {
         this.userlevel = userlevel;
     }
 

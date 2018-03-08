@@ -42,7 +42,7 @@ public class RegisterActivity extends Activity {
                             etEmail.requestFocus();
                             etEmail.setError(getResources().getString(R.string.invalid_email));
                         }else {
-                            User user = new User("1", etUsername.getText().toString(),
+                            User user = new User(1, etUsername.getText().toString(),
                                     etPassword.getText().toString(), etEmail.getText().toString());
                             dbSQLite.addUser(user);
 

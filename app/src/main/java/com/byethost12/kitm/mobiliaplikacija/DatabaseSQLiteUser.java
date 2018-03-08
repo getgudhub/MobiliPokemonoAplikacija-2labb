@@ -14,19 +14,22 @@ public class DatabaseSQLiteUser extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION   = 2;
     private static final String DATABASE_NAME   = "db";
 
+    private static final int ADMIN_LEVEL        = 9;
     private static final String TABLE_USERS     = "users";
-    private static final String USER_ID         = "id";
+    private static final String USER_ID         = "userid";
     private static final String USER_LEVEL      = "userlevel";
     private static final String USER_NAME       = "name";
     private static final String USER_PASSWORD   = "password";
     private static final String USER_EMAIL      = "email";
 
-    String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
+    String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USERS
+            + "("
             + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + USER_LEVEL + " TEXT,"
+            + USER_LEVEL + " INTEGER,"
             + USER_NAME + " TEXT,"
             + USER_PASSWORD + " TEXT,"
-            + USER_EMAIL + " TEXT" + ")";
+            + USER_EMAIL + " TEXT"
+            + ")";
 
     public DatabaseSQLiteUser(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,21 +53,22 @@ public class DatabaseSQLiteUser extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(USER_LEVEL,      user.getUserlevel());
+        values.put(USER_LEVEL,      1);
         values.put(USER_NAME,       user.getUsernameForRegister());
         values.put(USER_PASSWORD,   user.getPasswordForRegister());
         values.put(USER_EMAIL,      user.getEmailForRegister());
 
         // Inserting Row
+        db.execSQL(CREATE_USERS_TABLE);
         db.insert(TABLE_USERS, null, values);
 
         // Closing database connection
         db.close();
     }
 
-    User getUser(int id) {
+    User getUser(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-
+        User user = new User();
         Cursor cursor = db.query(
                 TABLE_USERS,
                 new String[]{
@@ -74,19 +78,21 @@ public class DatabaseSQLiteUser extends SQLiteOpenHelper {
                         USER_PASSWORD,
                         USER_EMAIL
                 },
-                USER_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
+                USER_NAME + "=?",
+                new String[]{String.valueOf(name)}, null, null, null, null);
 
-        if (cursor != null)
-            cursor.moveToFirst();
+        if (cursor != null && cursor.moveToFirst() ){
 
-        User user = new User(
-                cursor.getString(0),
-                cursor.getString(1),
+
+        user = new User(
+                cursor.getInt(0),
+                cursor.getInt(1),
                 cursor.getString(2),
-                cursor.getString(3)
+                cursor.getString(3),
+                cursor.getString(4)
         );
         cursor.close();
+        }
         return user;
     }
 
@@ -106,7 +112,7 @@ public class DatabaseSQLiteUser extends SQLiteOpenHelper {
                 User user = new User();
 
                 user.setId(Integer.parseInt(cursor.getString(0)));
-                user.setUserlevel(cursor.getString(1));
+                user.setUserlevel(cursor.getInt(1));
                 user.setUsernameForRegister(cursor.getString(2));
                 user.setPasswordForRegister(cursor.getString(3));
                 user.setEmailForRegister(cursor.getString(4));
@@ -119,6 +125,14 @@ public class DatabaseSQLiteUser extends SQLiteOpenHelper {
         // return users list
         return users;
 
+    }
+
+    public boolean isAdmin(int userlevel){
+        if(ADMIN_LEVEL==userlevel){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public boolean isValidUser(String username, String password){

@@ -13,6 +13,7 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION   = 2;
     private static final String DATABASE_NAME   = "db";
 
+    private static final String USER_ID             = "userid";
     private static final String TABLE_POKEMONS      = "pokemons";
     private static final String POKEMON_ID          = "id";
     private static final String POKEMON_NAME        = "name";
@@ -23,23 +24,29 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
     private static final String POKEMON_HEIGHT      = "height";
 
     String CREATE_POKEMONS_TABLE ="CREATE TABLE "+ TABLE_POKEMONS
-            + "(" +  POKEMON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "("
+            + POKEMON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + POKEMON_NAME + " TEXT,"
             + POKEMON_TYPE + " TEXT,"
             + POKEMON_ABILITIES + " TEXT,"
             + POKEMON_CP +" TEXT,"
             + POKEMON_WEIGHT + " REAL,"
-            + POKEMON_HEIGHT + " REAL" + ")";
+            + POKEMON_HEIGHT + " REAL,"
+            + USER_ID + " INTEGER"
+            + ")";
 
-    String CREATE_TABLE_IF_NOT_EXISTS_POKEMONS_TABLE = "CREATE TABLE IF NOT EXISTS "+
+    String CREATE_IF_NOT_EXISTS_POKEMONS_TABLE = "CREATE TABLE IF NOT EXISTS "+
             TABLE_POKEMONS
-            + "(" +  POKEMON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "("
+            + POKEMON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + POKEMON_NAME + " TEXT,"
             + POKEMON_TYPE + " TEXT,"
             + POKEMON_ABILITIES + " TEXT,"
             + POKEMON_CP +" TEXT,"
             + POKEMON_WEIGHT + " REAL,"
-            + POKEMON_HEIGHT + " REAL" + ")";
+            + POKEMON_HEIGHT + " REAL,"
+            + USER_ID + " INTEGER"
+            + ")";
 
     public DatabaseSQLitePokemon(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -47,7 +54,7 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_POKEMONS_TABLE);
+        db.execSQL(CREATE_IF_NOT_EXISTS_POKEMONS_TABLE);
     }
 
     @Override
@@ -69,6 +76,7 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
         values.put(POKEMON_CP,          poke.getCp());
         values.put(POKEMON_WEIGHT,      poke.getWeight());
         values.put(POKEMON_HEIGHT,      poke.getHeight());
+        values.put(USER_ID,             poke.getUserId());
 
         // Inserting Row
         db.insert(TABLE_POKEMONS, null, values);
@@ -107,13 +115,13 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
         return db.query(TABLE_POKEMONS, new String[]{
                 POKEMON_ID, POKEMON_NAME, POKEMON_TYPE,
                     POKEMON_ABILITIES, POKEMON_CP,
-                        POKEMON_WEIGHT, POKEMON_HEIGHT},
+                        POKEMON_WEIGHT, POKEMON_HEIGHT, USER_ID},
                 null, null, null, null, null);
     }
 
     public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(CREATE_TABLE_IF_NOT_EXISTS_POKEMONS_TABLE);
+        db.execSQL(CREATE_IF_NOT_EXISTS_POKEMONS_TABLE);
         Cursor res = db.rawQuery("SELECT * FROM "+TABLE_POKEMONS, null);
         return res;
     }
@@ -130,7 +138,8 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
                         POKEMON_ABILITIES,
                         POKEMON_CP,
                         POKEMON_WEIGHT,
-                        POKEMON_HEIGHT
+                        POKEMON_HEIGHT,
+                        USER_ID,
                 },
                 POKEMON_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
@@ -145,7 +154,8 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
                 cursor.getString(3),
                 cursor.getString(4),
                 cursor.getDouble(5),
-                cursor.getDouble(6)
+                cursor.getDouble(6),
+                cursor.getInt(7)
         );
         cursor.close();
         return pokemon;
@@ -162,7 +172,8 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
                         POKEMON_ABILITIES,
                         POKEMON_CP,
                         POKEMON_WEIGHT,
-                        POKEMON_HEIGHT
+                        POKEMON_HEIGHT,
+                        USER_ID,
                 },
                 POKEMON_NAME + "=?",
                 new String[]{String.valueOf(name)}, null, null, null, null);
@@ -172,12 +183,13 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
 
         Pokemonas pokemon = new Pokemonas(
                 cursor.getInt(0),
-                cursor.getString(1),
                 cursor.getString(2),
                 cursor.getString(3),
                 cursor.getString(4),
-                cursor.getDouble(5),
-                cursor.getDouble(6)
+                cursor.getString(5),
+                cursor.getDouble(6),
+                cursor.getDouble(7),
+                cursor.getInt(1)
         );
         cursor.close();
         return pokemon;
@@ -215,7 +227,7 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
             ArrayList<Pokemonas> pokemon = new ArrayList<Pokemonas>();
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(CREATE_TABLE_IF_NOT_EXISTS_POKEMONS_TABLE);
+        db.execSQL(CREATE_IF_NOT_EXISTS_POKEMONS_TABLE);
 
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_POKEMONS;
@@ -226,7 +238,35 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Pokemonas poke = new Pokemonas();
+                poke.setId(Integer.parseInt(cursor.getString(0)));
+                poke.setName(cursor.getString(1));
+                poke.setType(cursor.getString(2));
+                poke.setAbilities(cursor.getString(3));
+                poke.setCp(cursor.getString(4));
+                poke.setWeight(cursor.getDouble(5));
+                poke.setHeight(cursor.getDouble(6));
 
+                // adding pokemon to list
+                pokemon.add(poke);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        // return pokemons list
+        return pokemon;
+    }
+
+    public ArrayList<Pokemonas> getUserPokemons(int userid) {
+        ArrayList<Pokemonas> pokemon = new ArrayList<Pokemonas>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(CREATE_IF_NOT_EXISTS_POKEMONS_TABLE);
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_POKEMONS + " WHERE "+ USER_ID +" = "+ userid, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Pokemonas poke = new Pokemonas();
                 poke.setId(Integer.parseInt(cursor.getString(0)));
                 poke.setName(cursor.getString(1));
                 poke.setType(cursor.getString(2));

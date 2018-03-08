@@ -13,7 +13,7 @@ import android.widget.Toast;
 public class LoginActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -65,10 +65,10 @@ public class LoginActivity extends AppCompatActivity {
                     etPassword.setError(getResources().getString(R.string.login_invalid_password));
                 } else { // praėjo validaciją, kreipiamės į duomenų bazę
                     DatabaseSQLiteUser db = new DatabaseSQLiteUser(getApplicationContext());
-
                     if (db.isValidUser(etUsername.getText().toString(),
                             etPassword.getText().toString())) { // rado vartotoją
                         cancel = false;
+
                     } else { // nerado vartotojo
                         cancel = true;
                         Toast.makeText(LoginActivity.this, "Tokio vartotojo duomenų bazėje nėra",
@@ -90,8 +90,9 @@ public class LoginActivity extends AppCompatActivity {
                         user.setRememberMeKeyForLogin(false);
                     }
 
-                    Intent goToSearchActivity = new Intent(LoginActivity.this, PokemonTableActivity.class);
-                    startActivity(goToSearchActivity);
+                    Intent intent = new Intent(LoginActivity.this, PokemonTableActivity.class);
+                    intent.putExtra("name", etUsername.getText().toString());
+                    startActivity(intent);
                 }
 
             }

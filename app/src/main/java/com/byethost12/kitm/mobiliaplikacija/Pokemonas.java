@@ -3,6 +3,7 @@ package com.byethost12.kitm.mobiliaplikacija;
 
 
 public class Pokemonas {
+    private int userId;
     private int id;
     private String name;
     private double weight;
@@ -11,7 +12,8 @@ public class Pokemonas {
     private String abilities;
     private String type;
 
-    public Pokemonas(int id, String name, String type, String abilities, String cp, double weight, double height) {
+    public Pokemonas(int id, String name, String type, String abilities, String cp, double weight, double height, int userId) {
+        this.userId = userId;
         this.id = id;
         this.name = name;
         this.weight = weight;
@@ -23,6 +25,10 @@ public class Pokemonas {
 
     public Pokemonas() {
     }
+
+    public int getUserId(){return userId;}
+
+    public void setUserId(int userId){this.userId = userId;}
 
     public int getId() {
         return id;
@@ -82,13 +88,14 @@ public class Pokemonas {
 
     @Override
     public String toString() {
-               return ("ID: " + getId() + "\n" +
+               return ("Id: " + getId() + "\n" +
                 "Name: " + getName() + "\n" +
                 "Weight: " + getWeight() + " kg\n" +
                 "Height: " + getHeight() + " m\n" +
                 "CP: " + getCp() + "\n" +
                 "Abilities: " + getAbilities() + "\n" +
-                "Type: " + getType());
+                "Type: " + getType()) + "\n" +
+                "userId: "+ getUserId();
     }
 
 }

@@ -53,6 +53,10 @@
         android:textColor="@color/colorTextWhite"
         android:inputType="textPassword"/>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="65dp" />
+
     <CheckBox
         android:id="@+id/rememberMe"
         android:layout_width="match_parent"
@@ -65,22 +69,33 @@
         android:layout_width="match_parent"
         android:layout_height="55dp" />
 
-    <Button
-        android:id="@+id/btnLogin"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Prisijungti"
-        android:layout_margin="10dp"
-        android:background="@drawable/roundshapebtn"/>
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Registruotis"
-        android:layout_margin="10dp"
-        android:background="@drawable/roundshapebtn"/>
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/roundshapebtn"
+            android:text="Prisijungti" />
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/roundshapebtn"
+            android:text="Registruotis" />
+
+    </LinearLayout>
+    <![CDATA[
 
     /ImageView>
 
+]]>
 </LinearLayout>
