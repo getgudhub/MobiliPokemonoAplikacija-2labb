@@ -27,6 +27,7 @@ public class NewPokemonActivity extends AppCompatActivity {
     Spinner spinner;
     Toolbar toolbar;
     User user;
+    String username;
 
     Pokemonas pokemonas;
 
@@ -90,8 +91,6 @@ public class NewPokemonActivity extends AppCompatActivity {
                     cbFlying.requestFocus();
                     cbFlying.setError(getResources().getString(R.string.checkbox_not_checked));
                 } else {
-                   // id = Integer.parseInt(etId.getText().toString());
-                   // pokemonas.setId(id);
                     name = etName.getText().toString();
                     pokemonas.setName(name);
                     weight = Double.parseDouble(etWeight.getText().toString());
@@ -132,15 +131,16 @@ public class NewPokemonActivity extends AppCompatActivity {
                     Intent intent = getIntent();
                     Bundle bundle = intent.getExtras();
                     if(bundle !=null) {
-                        name = bundle.getString("name");
+                        username = bundle.getString("username");
                         id = bundle.getInt("userid");
                         pokemonas.setUserId(id);
                         db.addPokemon(pokemonas);
                     }
+
                     pokemonas = db.getByNamePokemonInfo(etName.getText().toString());
 
                     Intent intent2 = new Intent(NewPokemonActivity.this, PokemonTableActivity.class);
-                    intent2.putExtra("name", name);
+                    intent2.putExtra("username", username);
                     startActivity(intent2);
                     NewPokemonActivity.this.finish();
 
@@ -171,23 +171,15 @@ public class NewPokemonActivity extends AppCompatActivity {
         returnItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(NewPokemonActivity.this);
-                builder.setCancelable(true);
-                builder.setTitle("Ar norėtumėte išeiti neišsisaugoję?");
-                builder.setMessage("Pasirinkę 'Taip' pakitimai bus išsaugoti, jeigu įrašyti/pasirinkti teisingai.")
-                        .setPositiveButton("Taip", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("Ne", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent intent = new Intent(NewPokemonActivity.this, PokemonTableActivity.class);
-                                startActivity(intent);
-                                NewPokemonActivity.this.finish();
-                            }
-                        });
-                builder.show();
+                Intent intent = getIntent();
+                Bundle bundle = intent.getExtras();
+                if(bundle !=null) {
+                    username = bundle.getString("username");
+                }
+                Intent intentGo = new Intent(NewPokemonActivity.this, PokemonTableActivity.class);
+                intentGo.putExtra("username", username);
+                startActivity(intentGo);
+                NewPokemonActivity.this.finish();
                 return false;
             }
         });

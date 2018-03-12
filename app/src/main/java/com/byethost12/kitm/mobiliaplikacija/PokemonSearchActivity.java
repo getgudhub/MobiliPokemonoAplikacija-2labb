@@ -63,7 +63,8 @@ public class PokemonSearchActivity extends Activity {
         buffer.append("Pokemono Sugebėjimai: " + pok.getAbilities() + "\n");
         buffer.append("Pokemono Cp: " + pok.getCp() + "\n");
         buffer.append("Pokemono Plotis: " + pok.getWeight() + " kg\n");
-        buffer.append("Pokemono Ūgis: " + pok.getHeight() + " m\n\n");
+        buffer.append("Pokemono Ūgis: " + pok.getHeight() + " m\n");
+        buffer.append("user id: " + pok.getUserId() + " \n\n");
 
         showMessage("Pokemonas su ID: "+pok.getId(), buffer.toString());
     }
@@ -77,7 +78,8 @@ public class PokemonSearchActivity extends Activity {
         buffer.append("Pokemono Sugebėjimai: " + pok.getAbilities() + "\n");
         buffer.append("Pokemono Cp: " + pok.getCp() + "\n");
         buffer.append("Pokemono Plotis: " + pok.getWeight() + " kg\n");
-        buffer.append("Pokemono Ūgis: " + pok.getHeight() + " m\n\n");
+        buffer.append("Pokemono Ūgis: " + pok.getHeight() + " m\n");
+        buffer.append("user id: " + pok.getUserId() + " \n\n");
 
         showMessage("Pokemonas su vardu: "+pok.getName(), buffer.toString());
     }

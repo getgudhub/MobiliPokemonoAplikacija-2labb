@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION   = 2;
@@ -183,13 +182,13 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
 
         Pokemonas pokemon = new Pokemonas(
                 cursor.getInt(0),
+                cursor.getString(1),
                 cursor.getString(2),
                 cursor.getString(3),
                 cursor.getString(4),
-                cursor.getString(5),
+                cursor.getDouble(5),
                 cursor.getDouble(6),
-                cursor.getDouble(7),
-                cursor.getInt(1)
+                cursor.getInt(7)
         );
         cursor.close();
         return pokemon;
@@ -274,6 +273,7 @@ public class DatabaseSQLitePokemon extends SQLiteOpenHelper {
                 poke.setCp(cursor.getString(4));
                 poke.setWeight(cursor.getDouble(5));
                 poke.setHeight(cursor.getDouble(6));
+                poke.setUserId(cursor.getInt(7));
 
                 // adding pokemon to list
                 pokemon.add(poke);

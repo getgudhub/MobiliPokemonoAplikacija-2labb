@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     Intent intent = new Intent(LoginActivity.this, PokemonTableActivity.class);
-                    intent.putExtra("name", etUsername.getText().toString());
+                    intent.putExtra("username", etUsername.getText().toString());
                     startActivity(intent);
                 }
 

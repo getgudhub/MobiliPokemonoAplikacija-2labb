@@ -1,17 +1,10 @@
 package com.byethost12.kitm.mobiliaplikacija;
 
 
-import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,21 +18,20 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import static java.lang.String.valueOf;
 
 public class PokemonReworkActivity extends AppCompatActivity {
 
-    private ActionMenuView amvMenu;
     Button updateBtn, deleteBtn;
-    EditText  etId, etName, etWeight, etHeight;
+    EditText  etName, etWeight, etHeight;
     RadioGroup rbGroup;
     RadioButton rbStrong, rbMedium, rbWeak;
     CheckBox cbFast, cbInvisible, cbFlying, cbSwimmer, cbThrows;
     Spinner spinner;
     DatabaseSQLitePokemon db;
+    DatabaseSQLiteUser dbu;
     Toolbar toolbar;
 
-    int id;
+    int id, userid;
     String name;
     double weight;
     double height;
@@ -49,6 +41,7 @@ public class PokemonReworkActivity extends AppCompatActivity {
 
     Pokemonas pokemonas;
     Pokemonas oldPokemonas;
+    String username;
 
     String items[] = {"Vanduo", "Ugnis", "Tamsa", "Žolytė", "Elektra", "Žemė", "Oras"};
 
@@ -64,7 +57,6 @@ public class PokemonReworkActivity extends AppCompatActivity {
         updateBtn = (Button) findViewById(R.id.updateBtn);
         deleteBtn = (Button) findViewById(R.id.deleteBtn);
 
-        etId = (EditText) findViewById(R.id.etId);
         etName = (EditText) findViewById(R.id.etName);
         etWeight = (EditText) findViewById(R.id.etWeight);
         etHeight = (EditText) findViewById(R.id.etHeight);
@@ -85,7 +77,6 @@ public class PokemonReworkActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinner.setAdapter(adapter);
 
-
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
@@ -93,7 +84,6 @@ public class PokemonReworkActivity extends AppCompatActivity {
             oldPokemonas = new Pokemonas();
             id = bundle.getInt("id");
             oldPokemonas.setId(id);
-            etId.setText(valueOf(id));
             name = bundle.getString("name");
             oldPokemonas.setName(name);
             etName.setText(name);
@@ -118,6 +108,7 @@ public class PokemonReworkActivity extends AppCompatActivity {
             spinnerText = bundle.getString("type");
             oldPokemonas.setType(spinnerText);
              setSpinnerText(spinnerText);
+            oldPokemonas.setUserId(bundle.getInt("userid"));
         }
 
         updateBtn.setOnClickListener( new View.OnClickListener(){
@@ -126,17 +117,9 @@ public class PokemonReworkActivity extends AppCompatActivity {
 
                 pokemonas = new Pokemonas();
                 db = new DatabaseSQLitePokemon(PokemonReworkActivity.this);
+                dbu = new DatabaseSQLiteUser(PokemonReworkActivity.this);
 
-                if(Validation.isValidId(etId.getText().toString())){
-                    if(!db.checkId(Integer.parseInt(etId.getText().toString()))){
-                        etId.requestFocus();
-                        etId.setError(getResources().getString(R.string.id_invalid));
-                    }
-                }
-                if(etId.getText().toString().equals("") || !Validation.isValidId(etId.getText().toString()) ){
-                    etId.requestFocus();
-                    etId.setError(getResources().getString(R.string.id_invalid));
-                }else if (etName.getText().toString().equals("") || !Validation.isValidPokemonName(etName.getText().toString())) {
+                if (etName.getText().toString().equals("") || !Validation.isValidPokemonName(etName.getText().toString())) {
                     etName.requestFocus();
                     etName.setError(getResources().getString(R.string.name_invalid));
                 } else if (etWeight.getText().toString().equals("") || !Validation.isValidSize(etWeight.getText().toString())) {
@@ -149,7 +132,6 @@ public class PokemonReworkActivity extends AppCompatActivity {
                     cbFlying.requestFocus();
                     cbFlying.setError(getResources().getString(R.string.checkbox_not_checked));
                 } else {
-                    id = Integer.parseInt(etId.getText().toString());
                     pokemonas.setId(id);
                     name = etName.getText().toString();
                     pokemonas.setName(name);
@@ -189,9 +171,13 @@ public class PokemonReworkActivity extends AppCompatActivity {
 
                     db.updatePokemon(pokemonas);
 
+                    userid = oldPokemonas.getUserId();
+                    pokemonas.setUserId(userid);
                     toastMessage(pokemonas);
 
+                    username = dbu.getNameById(userid);
                     Intent goToSearchActivity = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
+                    goToSearchActivity.putExtra("username", username);
                     startActivity(goToSearchActivity);
                     PokemonReworkActivity.this.finish();
 
@@ -203,22 +189,21 @@ public class PokemonReworkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 db = new DatabaseSQLitePokemon(PokemonReworkActivity.this);
-                if(!Validation.isValidId(etId.getText().toString()) || !db.checkId(Integer.parseInt(etId.getText().toString()))) {
-                    etId.requestFocus();
-                    etId.setError(getResources().getString(R.string.invalid_id));
-                }else{
                     showDeleteToast();
                     deleteBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            db.deletePokemon(Integer.parseInt(etId.getText().toString()));
+                            db.deletePokemon(id);
                             Toast.makeText(PokemonReworkActivity.this, "Pokemonas ištrintas", Toast.LENGTH_SHORT).show();
+
+                            username = getUsername(oldPokemonas.getUserId());
                             Intent goBack = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
+                            goBack.putExtra("username", username);
                             startActivity(goBack);
                             PokemonReworkActivity.this.finish();
                         }
                     });
-                }
+               // }
             }
         });
 
@@ -233,9 +218,11 @@ public class PokemonReworkActivity extends AppCompatActivity {
         returnItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
+                username = getUsername(oldPokemonas.getUserId());
                 if (!updatePokemon()) {
                     Toast.makeText(PokemonReworkActivity.this, "Pakitimų nėra", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
+                    intent.putExtra("username", username);
                     startActivity(intent);
                     PokemonReworkActivity.this.finish();
                 } else {
@@ -247,6 +234,7 @@ public class PokemonReworkActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     db.updatePokemon(pokemonas);
                                     Intent intent = new Intent(PokemonReworkActivity.this, PokemonTableActivity.class);
+                                    intent.putExtra("username", username);
                                     startActivity(intent);
                                     PokemonReworkActivity.this.finish();
                                 }
@@ -311,7 +299,6 @@ public class PokemonReworkActivity extends AppCompatActivity {
 
     public void toastMessage(Pokemonas pokemonas){
         Toast.makeText(this,
-                        "Id: " +etId.getText().toString() + "\n" +
                         "Vardas: " + pokemonas.getName() + "\n" +
                         "Svoris: " + pokemonas.getWeight() + " kg\n" +
                         "Ūgis: " + pokemonas.getHeight() + " m\n" +
@@ -334,14 +321,7 @@ public class PokemonReworkActivity extends AppCompatActivity {
                 pokemonas = new Pokemonas();
                 db = new DatabaseSQLitePokemon(PokemonReworkActivity.this);
 
-                if(Validation.isValidId(etId.getText().toString())){
-                    if(!db.checkId(Integer.parseInt(etId.getText().toString()))){
-                        return false;
-                    }
-                }
-                if(etId.getText().toString().equals("") || !Validation.isValidId(etId.getText().toString()) ){
-                    return false;
-                }else if (etName.getText().toString().equals("") || !Validation.isValidPokemonName(etName.getText().toString())) {
+                if (etName.getText().toString().equals("") || !Validation.isValidPokemonName(etName.getText().toString())) {
                     return false;
                 } else if (etWeight.getText().toString().equals("") || !Validation.isValidSize(etWeight.getText().toString())) {
                     return false;
@@ -350,7 +330,6 @@ public class PokemonReworkActivity extends AppCompatActivity {
                 } else if (!(cbFlying.isChecked() || cbInvisible.isChecked() || cbThrows.isChecked() || cbFast.isChecked() || cbSwimmer.isChecked())) {
                     return false;
                 } else {
-                    id = Integer.parseInt(etId.getText().toString());
                     pokemonas.setId(id);
                     name = etName.getText().toString();
                     pokemonas.setName(name);
@@ -388,8 +367,7 @@ public class PokemonReworkActivity extends AppCompatActivity {
                     spinnerText = spinner.getSelectedItem().toString();
                     pokemonas.setType(spinnerText);
 
-                    if(pokemonas.getId()==oldPokemonas.getId()&&
-                    pokemonas.getAbilities().equals(oldPokemonas.getAbilities())&&
+                    if(pokemonas.getAbilities().equals(oldPokemonas.getAbilities())&&
                             pokemonas.getCp().equals(oldPokemonas.getCp())&&
                             pokemonas.getHeight()==oldPokemonas.getHeight()&&
                             pokemonas.getWeight()==oldPokemonas.getWeight()&&
@@ -400,6 +378,11 @@ public class PokemonReworkActivity extends AppCompatActivity {
                         return true;
                     }
                 }
+            }
+            public String getUsername(int userid){
+                DatabaseSQLiteUser dbu = new DatabaseSQLiteUser(PokemonReworkActivity.this);
+                String username = dbu.getNameById(userid);
+                return username;
             }
 
 }

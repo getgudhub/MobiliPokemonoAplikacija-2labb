@@ -158,4 +158,18 @@ public class DatabaseSQLiteUser extends SQLiteOpenHelper {
             return true;
         }
     }
+    public String getNameById(int id){
+        String username="";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("Select * From "+ TABLE_USERS + " Where "+ USER_ID +" = "+ id, null);
+        if (c != null)
+            if(c.moveToFirst()) {
+                do {
+                    username = c.getString( c.getColumnIndex(USER_NAME) );
+                } while (c.moveToNext());
+            }
+        c.close();
+        return username;
+
+    }
 }

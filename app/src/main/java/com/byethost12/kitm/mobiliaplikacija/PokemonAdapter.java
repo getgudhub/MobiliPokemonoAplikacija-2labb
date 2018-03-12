@@ -50,7 +50,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.MyViewHo
                     if(clickListener !=null){
                         clickListener.onItemClick(getAdapterPosition(),v);
                         int itemPos = getAdapterPosition();
-                        Pokemonas pokemonas = pokemons.get(itemPos); //?necessary
+                        //Pokemonas pokemonas = pokemons.get(itemPos); //?necessary
 
                         int pokeId = pokemons.get(itemPos).getId();
                         String pokeName = pokemons.get(itemPos).getName();
@@ -59,6 +59,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.MyViewHo
                         String pokeRB = pokemons.get(itemPos).getCp();
                         String pokeAbilities = pokemons.get(itemPos).getAbilities();
                         String pokeType = pokemons.get(itemPos).getType();
+                        int userId = pokemons.get(itemPos).getUserId();
 
                         Intent intent =  new Intent(context, PokemonReworkActivity.class);
                         intent.putExtra("id", pokeId);
@@ -68,6 +69,8 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.MyViewHo
                         intent.putExtra("CP", pokeRB);
                         intent.putExtra("abil", pokeAbilities);
                         intent.putExtra("type", pokeType);
+                        intent.putExtra("userid", userId);
+
                         context.startActivity(intent);
                     }
                 }

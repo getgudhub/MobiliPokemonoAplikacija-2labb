@@ -19,6 +19,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -27,7 +31,12 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
 
     DatabaseSQLiteUser dbUser = new DatabaseSQLiteUser(PokemonTableActivity.this);
     DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(PokemonTableActivity.this);
-    
+
+    public static final int CONNECTION_TIMEOUT = 10000;
+    public static final int READ_TIMEOUT = 15000;
+    public static final String DB_URL = "";
+    public static final String COOCKIE_STORAGE = "";
+
     private RecyclerView mRecyclerView;
     private SearchView searchView;
     private RecyclerView.LayoutManager layoutManager;
@@ -58,24 +67,32 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
         Bundle bundle = intent.getExtras();
         
         if(bundle !=null){
-            name = bundle.getString("name");
+            name = bundle.getString("username");
         }
         
         user = dbUser.getUser(name);
         id = user.getId();
         
         if(dbUser.isAdmin(user.getUserlevel()))
-        {pokemonList = db.getAllPokemons();
+        {
+            pokemonList = db.getAllPokemons();
+            adapter = new PokemonAdapter(this, pokemonList);
+            mRecyclerView.setAdapter(adapter);
         }else{
-            pokemonList = db.getUserPokemons(user.getId());
+            pokemonList = db.getUserPokemons(id);
+            adapter = new PokemonAdapter(this, pokemonList);
+            mRecyclerView.setAdapter(adapter);
         }
-        adapter = new PokemonAdapter(this, pokemonList);
-        mRecyclerView.setAdapter(adapter);
+
 
         adapter.setOnItemClickListener(new PokemonAdapter.ClickListener(){
             @Override
             public void onItemClick(int position, View v) {
                 //starts new activity on Card click from adapter's class, ViewHolder method
+                Intent intent = new Intent(PokemonTableActivity.this, PokemonReworkActivity.class);
+                intent.putExtra("userid", id);
+                intent.putExtra("username", name);
+
             }
         });
 
@@ -85,7 +102,7 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
             public void onClick(View v) {
                 Intent intent = new Intent(PokemonTableActivity.this, NewPokemonActivity.class);
                 intent.putExtra("userid", id);
-                intent.putExtra("name", name);
+                intent.putExtra("username", name);
                 startActivity(intent);
             }
         });
@@ -156,6 +173,8 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
 
     private class AsynchFetch extends AsyncTask<String,String,String>{
         ProgressDialog progressDialog = new ProgressDialog(PokemonTableActivity.this);
+        HttpURLConnection conn;
+        URL url = null;
         String searchQuery;
 
         public AsynchFetch(String searchQuery){
@@ -173,6 +192,26 @@ public class PokemonTableActivity extends AppCompatActivity implements SearchVie
         @Override
         protected String doInBackground(String... strings) {
             DatabaseSQLitePokemon db = new DatabaseSQLitePokemon(PokemonTableActivity.this);
+            try{
+                url = new URL ("http://java17.byethost4.com/mobile/database.php");
+            }catch(MalformedURLException e){
+                e.printStackTrace();
+                return e.toString();
+            }
+            try{
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(READ_TIMEOUT);
+                conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                conn.setRequestMethod("POST");
+
+                conn.setRequestProperty("Cookie","; expires=2038 m. sausio 1d., penktadienis 01:55:55; path=/");
+            }catch(IOException e){
+                e.printStackTrace();
+                return e.toString();
+            }finally{
+                conn.disconnect();
+            }
+
             pokemonList = db.getUserPokemons(user.getId());
             if(pokemonList.isEmpty()){
                 return "no rows";
